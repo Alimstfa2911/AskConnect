@@ -1,0 +1,39 @@
+type User {
+  id: ID!
+  name: String
+  email: String
+  avatar: String
+  questions: [Question]
+  answers: [Answer]
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+type Question {
+  id: ID!
+  title: String!
+  description: String!
+  author: User
+  votes: [Vote]
+  createdAt: String!
+  updatedAt: String!
+  answers: [Answer]
+}
+
+type Answer {
+  id: ID!
+  text: String
+  author: User
+  question: Question!
+  votes: [Vote]
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Vote {
+  user: User
+  value: Int!  # 1 = upvote, -1 = downvote
+}

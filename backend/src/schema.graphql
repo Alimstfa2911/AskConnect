@@ -1,0 +1,37 @@
+type Query {
+  users: [User]
+  profile: User
+  questions: [Question]
+  question(id: ID!): Question
+  answers(questionId: ID!): [Answer!]!
+  searchQuestions(
+    keyword: String
+    authorId: ID
+    fromDate: String
+    toDate: String
+  ): [Question]
+}
+
+type Mutation {
+  registerUser(name: String!, email: String!, password: String!, avatar: String): AuthPayload!
+
+  loginUser(email: String!, password: String!): AuthPayload!
+
+  deleteUser(id: String!): User
+
+  createQuestion(title: String!, description: String!): Question
+
+  upvoteQuestion(questionId: ID!): Question
+
+  downvoteQuestion(questionId: ID!): Question
+
+  addAnswer(questionId: ID!, text: String!): Answer!
+
+  upvoteAnswer(answerId: ID!): Answer
+
+  downvoteAnswer(answerId: ID!): Answer
+}
+
+# type Subscription {
+#     messageAdded: Message!
+# }
