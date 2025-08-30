@@ -7,6 +7,9 @@ import { pubsub } from "../schema/pubsub.js";
 import { Question } from "../models/questionSchema.js";
 import { Answer } from "../models/answerSchema.js";
 import { transporter } from "../utils/mailer.js";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const userMutation = {
   registerUser: async (_, args) => {
@@ -240,8 +243,8 @@ export const answerVoteMutation = {
 export const mailMutation = {
   forgotPassword: async (_, { email }, context) => {
     const user = await User.findOne({ email });
-    authCheck(context);
-    console.log("Check for user conetxt", context);
+    
+    console.log("Check for user conetxt", user);
 
     const token = jwt.sign(
       {

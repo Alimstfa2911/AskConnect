@@ -45,25 +45,24 @@ app.use(
   expressMiddleware(server, {
     context: async ({ req }) => {
       const authHeader = req.headers.authorization || "";
+      let user = null;
+
       if (authHeader.startsWith("Bearer ")) {
         const token = authHeader.split(" ")[1];
-
-        if (!token) return {};
-        try {
-          const decoded = jwt.verify(token, "SECRET_KEY");
-         
-          return { user: decoded }; 
-        } catch (err) {
-          console.error("JWT Error:", err.message);
-
-          return {};
+        if (token) {
+          try {
+            user = jwt.verify(token, "SECRET_KEY");
+          } catch (err) {
+            console.error("JWT Error:", err.message);
+          }
         }
       }
+
+      return { user }; 
     },
   })
 );
 
-// WebSocket server for subscriptions
 const wsServer = new WebSocketServer({
   server: httpServer,
   path: "/graphql",

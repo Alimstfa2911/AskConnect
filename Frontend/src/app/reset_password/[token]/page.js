@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
-import { useMutation, gql } from "@apollo/client";
 import { useParams, useRouter } from "next/navigation";
 import { Box, Button, TextField, Typography, Card } from "@mui/material";
 import { RESET_PASSWORD } from "@/app/graphql/mutations";
+import { useMutation } from "@apollo/client/react";
 
 
 

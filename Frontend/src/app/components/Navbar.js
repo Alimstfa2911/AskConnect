@@ -13,14 +13,16 @@ import SearchBar from "./SearchBar";
 export default function Navbar() {
   const router = useRouter();
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) setIsLoggedIn(true);
+    setLoading(false);
   }, [setIsLoggedIn]);
 
-  const handleNavigation = (path) => router.push(path);
-
+  if (loading) return null;
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
@@ -38,21 +40,19 @@ export default function Navbar() {
           AskConnect
         </Typography>
 
-  
-
         {/* Auth Buttons */}
         {!isLoggedIn ? (
           <>
             <Button
               color="inherit"
-              onClick={() => handleNavigation("/login")}
+              onClick={() => router.push("/login")}
               sx={{ "&:hover": { backgroundColor: "primary.dark" } }}
             >
               Login
             </Button>
             <Button
               color="inherit"
-              onClick={() => handleNavigation("/register")}
+              onClick={() => router.push("/register")}
               sx={{ "&:hover": { backgroundColor: "primary.dark" } }}
             >
               Register
@@ -62,14 +62,14 @@ export default function Navbar() {
           <>
             <Button
               color="inherit"
-              onClick={() => handleNavigation("/question/create")}
+              onClick={() => router.push("/question/create")}
               sx={{ "&:hover": { backgroundColor: "primary.dark" } }}
             >
               Create Question
             </Button>
             <Button
               color="inherit"
-              onClick={() => handleNavigation("/profile")}
+              onClick={() => router.push("/profile")}
               sx={{ "&:hover": { backgroundColor: "primary.dark" } }}
             >
               Profile
