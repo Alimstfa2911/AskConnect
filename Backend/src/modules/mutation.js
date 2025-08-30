@@ -75,8 +75,7 @@ export const questionMutation = {
     });
 
     await User.findByIdAndUpdate(context.user.id, {
-      $push: { questions: question._id,
-      }
+      $push: { questions: question._id },
     });
 
     console.log("Question :", question);
@@ -92,13 +91,22 @@ export const questionVoteMutation = {
     const question = await Question.findById(questionId);
     if (!question) throw new Error("Question not found");
 
-    const existenceVote = question.votes.find(
-      (v) => v.context.user.toString() === context.user.id
+    const existingVote = question.votes.find(
+      (v) => v.user.toString() === context.user.id
     );
 
-    if (existenceVote) {
-      existenceVote = 1;
+    if (existingVote) {
+      if (existingVote.value === 1) {
+        // User already upvoted → remove vote
+        question.votes = question.votes.filter(
+          (v) => v.user.toString() !== context.user.id
+        );
+      } else {
+        // Switch from downvote to upvote
+        existingVote.value = 1;
+      }
     } else {
+      // Add new upvote
       question.votes.push({ user: context.user.id, value: 1 });
     }
 
@@ -117,9 +125,18 @@ export const questionVoteMutation = {
     );
 
     if (existingVote) {
-      existingVote.value = -1; 
+      if (existingVote.value === -1) {
+        // User already downvoted → remove vote
+        question.votes = question.votes.filter(
+          (v) => v.user.toString() !== context.user.id
+        );
+      } else {
+        // Switch from upvote to downvote
+        existingVote.value = -1;
+      }
     } else {
-      question.votes.push({ user: context.user.id, value: -1 }); 
+      // Add new downvote
+      question.votes.push({ user: context.user.id, value: -1 });
     }
 
     await question.save();
@@ -145,12 +162,15 @@ export const answerMutation = {
     });
 
     await User.findByIdAndUpdate(context.user.id, {
-      $push: { answers: answer._id}
-    })
+      $push: { answers: answer._id },
+    });
 
     console.log("Answer :", answer);
-
-    return (await answer.populate("author")).populate("question");
+    return await answer.populate([
+      "author",
+      "question",
+      { path: "votes.user" },
+    ]);
   },
 };
 
@@ -162,17 +182,27 @@ export const answerVoteMutation = {
     if (!answer) throw new Error("Answer not found");
 
     const existingVote = answer.votes.find(
-      (v) => v.context.user.toString() === context.user.id
+      (v) => v.user.toString() === context.user.id
     );
 
     if (existingVote) {
-      existingVote.value = 1;
+      if (existingVote.value === 1) {
+        answer.votes = answer.votes.filter(
+          (v) => v.user.toString() !== context.user.id
+        );
+      } else {
+        existingVote.value = 1;
+      }
     } else {
       answer.votes.push({ user: context.user.id, value: 1 });
     }
-
+    console.log("Existing vote :", existingVote);
     await answer.save();
-    return (await answer.populate("author")).populate("question");
+    return await answer.populate([
+      "author",
+      "question",
+      { path: "votes.user" },
+    ]);
   },
 
   downvoteAnswer: async (_, { answerId }, context) => {
@@ -180,18 +210,28 @@ export const answerVoteMutation = {
 
     const answer = await Answer.findById(answerId);
     if (!answer) throw new Error("Answer not found");
-
+  
     const existingVote = answer.votes.find(
-      (v) => v.context.user.toString() === context.user.id
+      (v) => v.user.toString() === context.user.id
     );
 
-    if (!existingVote) {
-      existingVote.value = -1;
+    if (existingVote) {
+      if (existingVote.value === -1) {
+        answer.votes = answer.votes.filter(
+          (v) => v.user.toString() !== context.user.id
+        );
+      } else {
+        existingVote.value = -1;
+      }
     } else {
       answer.votes.push({ user: context.user.id, value: -1 });
     }
-
+    
     await answer.save();
-    return (await answer.populate("author")).populate("question");
+    return await answer.populate([
+      "author",
+      "question",
+      { path: "votes.user" },
+    ]);
   },
 };

@@ -6,8 +6,7 @@ import {
   questionQueryModule,
   questionVoteMutationModule,
   userMutationModule,
-  userQueryModule
-
+  userQueryModule,
 } from "../modules/index.js";
 
 import { questionMutation } from "../modules/mutation.js";
@@ -17,7 +16,7 @@ export const resolvers = {
   Query: {
     ...userQueryModule.Query,
     ...questionQueryModule.Query,
-    ...answerQueryModule.Query
+    ...answerQueryModule.Query,
   },
 
   Mutation: {
@@ -25,7 +24,15 @@ export const resolvers = {
     ...questionMutationModule.Mutation,
     ...questionVoteMutationModule.Mutation,
     ...answerMutationModule.Mutation,
-    ...answerVoteMutationModule.Mutation
+    ...answerVoteMutationModule.Mutation,
   },
-
+  User: {
+    id: (parent) => parent?._id?.toString() || parent?.id || null,
+  },
+  Answer: {
+    id: (parent) => parent?._id?.toString() || parent?.id || null,
+  },
+  Question: {
+    id: (parent) => parent?._id?.toString() || parent?.id || null,
+  },
 };

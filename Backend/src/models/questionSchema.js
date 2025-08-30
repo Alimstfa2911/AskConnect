@@ -8,19 +8,15 @@ const QuestionSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    votes: [
-      {
-        user: {
-          type: Schema.Types.ObjectId,
-          ref: "User",
+    votes: {
+      type: [
+        {
+          user: { type: Schema.Types.ObjectId, ref: "User" },
+          value: { type: Number, enum: [1, -1], default: 0 },
         },
-        value: {
-          type: Number,
-          enum: [1, -1],
-          default: 0
-        },
-      },
-    ],
+      ],
+      default: [], 
+    },
     answers: [
       {
         type: Schema.Types.ObjectId,

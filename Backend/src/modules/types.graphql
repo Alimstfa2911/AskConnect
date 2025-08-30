@@ -24,7 +24,7 @@ type Question {
 }
 
 type Answer {
-  id: ID!
+  id: ID
   text: String
   author: User
   question: Question!
