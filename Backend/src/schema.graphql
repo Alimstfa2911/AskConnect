@@ -13,7 +13,12 @@ type Query {
 }
 
 type Mutation {
-  registerUser(name: String!, email: String!, password: String!, avatar: String): AuthPayload!
+  registerUser(
+    name: String!
+    email: String!
+    password: String!
+    avatar: String
+  ): AuthPayload!
 
   loginUser(email: String!, password: String!): AuthPayload!
 
@@ -30,6 +35,10 @@ type Mutation {
   upvoteAnswer(answerId: ID!): Answer
 
   downvoteAnswer(answerId: ID!): Answer
+
+  forgotPassword(email: String!): MessageResponse!
+
+  resetPassword(token: String!, newPassword: String!): MessageResponse!
 }
 
 # type Subscription {

@@ -2,6 +2,7 @@ import {
   answerMutationModule,
   answerQueryModule,
   answerVoteMutationModule,
+  mailMutationModule,
   questionMutationModule,
   questionQueryModule,
   questionVoteMutationModule,
@@ -25,6 +26,7 @@ export const resolvers = {
     ...questionVoteMutationModule.Mutation,
     ...answerMutationModule.Mutation,
     ...answerVoteMutationModule.Mutation,
+    ...mailMutationModule.Mutation
   },
   User: {
     id: (parent) => parent?._id?.toString() || parent?.id || null,

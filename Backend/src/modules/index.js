@@ -1,6 +1,7 @@
 import {
   answerMutation,
   answerVoteMutation,
+  mailMutation,
   questionMutation,
   questionVoteMutation,
   userMutation,
@@ -61,3 +62,9 @@ export const answerVoteMutationModule = {
 //         ...userSubscription
 //     }
 // }
+
+export const mailMutationModule = {
+  Mutation: {
+    ...mailMutation,
+  },
+};

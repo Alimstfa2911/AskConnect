@@ -114,7 +114,7 @@ export default function LoginPage() {
             component="button"
             variant="body2"
             underline="hover"
-            onClick={() => router.push("/forgot-password")}
+            onClick={() => router.push("/forget_password")}
           >
             Forgot Password ?
           </MuiLink>

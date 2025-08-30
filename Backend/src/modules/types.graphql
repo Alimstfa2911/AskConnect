@@ -35,5 +35,9 @@ type Answer {
 
 type Vote {
   user: User
-  value: Int!  # 1 = upvote, -1 = downvote
+  value: Int! # 1 = upvote, -1 = downvote
+}
+
+type MessageResponse {
+  message: String!
 }

@@ -6,6 +6,7 @@ import { roleCheck } from "../utils/roleUtils.js";
 import { pubsub } from "../schema/pubsub.js";
 import { Question } from "../models/questionSchema.js";
 import { Answer } from "../models/answerSchema.js";
+import { transporter } from "../utils/mailer.js";
 
 export const userMutation = {
   registerUser: async (_, args) => {
@@ -210,7 +211,7 @@ export const answerVoteMutation = {
 
     const answer = await Answer.findById(answerId);
     if (!answer) throw new Error("Answer not found");
-  
+
     const existingVote = answer.votes.find(
       (v) => v.user.toString() === context.user.id
     );
@@ -226,12 +227,57 @@ export const answerVoteMutation = {
     } else {
       answer.votes.push({ user: context.user.id, value: -1 });
     }
-    
+
     await answer.save();
     return await answer.populate([
       "author",
       "question",
       { path: "votes.user" },
     ]);
+  },
+};
+
+export const mailMutation = {
+  forgotPassword: async (_, { email }, context) => {
+    const user = await User.findOne({ email });
+    authCheck(context);
+    console.log("Check for user conetxt", context);
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+      "SECRET_KEY",
+      { expiresIn: "15m" }
+    );
+
+    const resetLink = `${process.env.FRONTEND_URL}/reset_password/${token}`;
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Password Reset",
+      html: `<p>Click <a href="${resetLink}">here</a> to reset your password. 
+               This link is valid for 15 minutes.</p>`,
+    });
+
+    return { message: "Password reset email sent" };
+  },
+
+  resetPassword: async (_, { token, newPassword }, context ) => {
+    try {
+      const decoded = jwt.verify(token, "SECRET_KEY");
+      const user = await User.findById(decoded.id);
+      if (!user) throw new Error("Invalid token");
+
+      user.password = await bcrypt.hash(newPassword, 10);
+      await user.save();
+
+      return { message: "Password updated successfully" };
+    } catch (err) {
+      throw new Error("Invalid or expired token");
+    }
   },
 };
