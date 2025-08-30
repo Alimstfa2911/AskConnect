@@ -54,15 +54,18 @@ export const GET_QUESTION_BY_ID = gql`
       votes {
         user {
           id
-          name
         }
         value
       }
       answers {
+        id
         text
         author {
           id
           name
+        }
+        question {
+          id
         }
       }
     }

@@ -1,29 +1,50 @@
-// src/app/context/AuthContext.js
 "use client";
 import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
+    const userData = localStorage.getItem("user");
+
+    if (token && userData && userData !== "undefined") {
+      try {
+        const parsedUser = JSON.parse(userData);
+        setIsLoggedIn(true);
+        setUser(parsedUser);
+      } catch (err) {
+        console.error("Failed to parse user from localStorage:", err);
+        localStorage.removeItem("user"); // remove corrupted data
+        setIsLoggedIn(false);
+        setUser(null);
+      }
+    } else {
+      // clear inconsistent state
+      setIsLoggedIn(false);
+      setUser(null);
+    }
   }, []);
 
-  const login = (token) => {
+  const login = (token, user) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
     setIsLoggedIn(true);
+    setUser(user);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setIsLoggedIn(false);
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoggedIn, setIsLoggedIn, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

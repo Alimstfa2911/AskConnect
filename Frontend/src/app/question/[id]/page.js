@@ -19,67 +19,90 @@ export default function QuestionDetailPage() {
   const params = useParams();
   const { id } = params;
 
-  const { loading, error, data } = useQuery(GET_QUESTION_BY_ID, {
+  const { _, error, data } = useQuery(GET_QUESTION_BY_ID, {
     variables: { id },
     skip: !id,
   });
 
-  if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" mt={5}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
   const question = data?.question;
+  console.log("Quesyion :", question);
+
   if (error)
     return <Typography color="error">Error: {error?.message}</Typography>;
   if (!question) return <Typography>No question found</Typography>;
 
   return (
-    <Container maxWidth="xl" sx={{ mt: 3 }}>
-      <Grid container spacing={3}>
+    <Container sx={{ mt: 3 }}>
+      {/* Left Column - Question */}
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2, // space between columns
+          alignItems: "flex-start",
+          height: "80vh",
+        }}
+      >
         {/* Left Column - Question */}
-        <Grid item xs={12} md={7}>
-          <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-            <QuestionCard question={question} />
-          </Paper>
-        </Grid>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 2,
+            borderRadius: 2,
+            width: "48%", // fixed width
+            display: "flex",
+            flexDirection: "column",
+            overflow: "auto", // scroll if question is long
+          }}
+        >
+          <QuestionCard question={question} hideViewButton={true} />
+        </Paper>
 
         {/* Right Column - Answers */}
-        <Grid item xs={12} md={5}>
-          <Paper
-            elevation={3}
-            sx={{
-              p: 2,
-              borderRadius: 2,
-              height: "80vh",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <Typography variant="h5" sx={{ mb: 2 }}>
-              Answers
-            </Typography>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 2,
+            borderRadius: 2,
+            width: "48%", // fixed width
+            display: "flex",
+            flexDirection: "column",
+            minHeight: 0,
+            height: "100%", // same height as left
+          }}
+        >
+          <Typography variant="h5" sx={{ mb: 2 }}>
+            Answers
+          </Typography>
 
-            <Box sx={{ flex: 1, overflowY: "auto", mb: 2 }}>
-              {question.answers.length > 0 ? (
-                question.answers.map((ans, i) => (
-                  <AnswerCard key={ans._id || i} answer={ans} />
-                ))
-              ) : (
-                <Typography>No answers</Typography>
-              )}
-            </Box>
+          {/* Scrollable answers list */}
+          <Box sx={{ flex: 1, overflowY: "auto", mb: 2, minHeight: 0 }}>
+            {question.answers.length > 0 ? (
+              question.answers.map((ans) => (
+                <AnswerCard key={ans.id} answer={ans} />
+              ))
+            ) : (
+              <Typography>No answers</Typography>
+            )}
+          </Box>
 
-            {/* Form stays fixed at bottom of answers column */}
-            <Box>
-              <CreateAnswerForm questionId={question.id} />
-            </Box>
-          </Paper>
-        </Grid>
-      </Grid>
+          {/* Form stays fixed at bottom */}
+          <Box>
+            <CreateAnswerForm questionId={question.id} />
+          </Box>
+        </Paper>
+      </Box>
+
+      {/* Right Column - Answers */}
+      <Grid
+        item
+        xs={6}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "80vh",
+          mb: 6,
+        }}
+      ></Grid>
     </Container>
   );
 }

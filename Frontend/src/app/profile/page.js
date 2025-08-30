@@ -1,67 +1,78 @@
 "use client";
-import { Box, Typography, CircularProgress, Card, CardContent } from "@mui/material";
+
+import { Box, Typography, CircularProgress, Card, CardContent, Avatar } from "@mui/material";
 import { PROFILE } from "../graphql/queries";
 import { useQuery } from "@apollo/client/react";
 
 export default function ProfilePage() {
   const { loading, error, data } = useQuery(PROFILE);
 
-  if (loading) return <CircularProgress />;
-  if (error) return <Typography color="error">{error.message}</Typography>;
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={5}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box display="flex" justifyContent="center" mt={5}>
+        <Typography color="error">{error.message}</Typography>
+      </Box>
+    );
+  }
+
+  const { profile } = data;
 
   return (
-    <Box display="flex" gap={4} flexWrap="wrap">
-      {/* Left column: User info */}
-      <Box flex="1 1 250px">
-        <Card>
-          <CardContent sx={{ textAlign: "center" }}>
-            { <h1>Profile</h1> }
-            <img
-              src={data.profile.avatar || "/profile.jpg"}
-              alt="user_profile"
-              width={100}
-              style={{ borderRadius: "50%", marginBottom: 10 }}
-            />
-            <Typography variant="h5"><strong>Name : </strong>{data.profile.name}</Typography>
-            <Typography variant="body2"><strong>Email : </strong>{data.profile.email}</Typography>
-          </CardContent>
-        </Card>
-      </Box>
+    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4, mt: 5, px: 2, justifyContent: "center" }}>
+      {/* Left Column: User Info */}
+      <Card sx={{ flex: "1 1 250px", p: 3, boxShadow: 4, borderRadius: 3, textAlign: "center" }}>
+        <Typography variant="h5" fontWeight="bold" gutterBottom>
+          Profile
+        </Typography>
+        <Avatar
+          src={profile.avatar || "/profile.jpg"}
+          alt={profile.name}
+          sx={{ width: 100, height: 100, mx: "auto", mb: 2 }}
+        />
+        <Typography variant="h6"><strong>Name:</strong> {profile.name}</Typography>
+        <Typography variant="body2"><strong>Email:</strong> {profile.email}</Typography>
+      </Card>
 
-      {/* Right column: Questions & Answers */}
-      <Box flex="2 1 600px" display="flex" flexDirection="column" gap={2}>
+      {/* Right Column: Questions & Answers */}
+      <Box flex="2 1 600px" display="flex" flexDirection="column" gap={3}>
         {/* Questions Card */}
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              📝 Questions Asked
-            </Typography>
-            {data.profile.questions && data.profile.questions.length > 0 ? (
-              data.profile.questions.map((q) => (
-                <Typography key={q.id}>📝 {q.title}</Typography>
-              ))
-            ) : (
-              <Typography>No questions asked yet</Typography>
-            )}
-          </CardContent>
+        <Card sx={{ p: 2, boxShadow: 3, borderRadius: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            📝 Questions Asked
+          </Typography>
+          {profile.questions && profile.questions.length > 0 ? (
+            profile.questions.map((q) => (
+              <Typography key={q.id} sx={{ mb: 1 }}>
+                📝 {q.title}
+              </Typography>
+            ))
+          ) : (
+            <Typography>No questions asked yet</Typography>
+          )}
         </Card>
 
         {/* Answers Card */}
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              💬 Answers Given
-            </Typography>
-            {data.profile.answers && data.profile.answers.length > 0 ? (
-              data.profile.answers.map((a) => (
-                <Typography key={a.id}>
-                  💬 {a.text} (on: {a.question.title})
-                </Typography>
-              ))
-            ) : (
-              <Typography>No answers given yet</Typography>
-            )}
-          </CardContent>
+        <Card sx={{ p: 2, boxShadow: 3, borderRadius: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            💬 Answers Given
+          </Typography>
+          {profile.answers && profile.answers.length > 0 ? (
+            profile.answers.map((a) => (
+              <Typography key={a.id} sx={{ mb: 1 }}>
+                💬 {a.text} (on: {a.question.title})
+              </Typography>
+            ))
+          ) : (
+            <Typography>No answers given yet</Typography>
+          )}
         </Card>
       </Box>
     </Box>

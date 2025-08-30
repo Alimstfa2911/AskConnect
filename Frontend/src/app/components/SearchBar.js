@@ -23,7 +23,7 @@ export default function SearchBar() {
       if (keyword.trim() !== "") {
         searchQuestions({ variables: { keyword } });
       }
-    }, 500);
+    }, 0);
 
     return () => clearTimeout(delayDebounce);
   }, [keyword]);

@@ -68,7 +68,18 @@ export const UPVOTE_ANSWER = gql`
   mutation upvoteAnswer($answerId: ID!) {
     upvoteAnswer(answerId: $answerId) {
       id
+      text
+      author {
+        id
+        name
+      }
+      question {
+        id
+      }
       votes {
+        user {
+          id
+        }
         value
       }
     }
@@ -79,7 +90,18 @@ export const DOWNVOTE_ANSWER = gql`
   mutation downvoteAnswer($answerId: ID!) {
     downvoteAnswer(answerId: $answerId) {
       id
+      text
+      author {
+        id
+        name
+      }
+      question {
+        id
+      }
       votes {
+        user {
+          id
+        }
         value
       }
     }

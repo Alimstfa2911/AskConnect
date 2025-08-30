@@ -6,10 +6,11 @@ import CssBaseline from "@mui/material/CssBaseline";
 import client from "./lib/apolloClient";
 import Layout from "./components/Layout";
 import AuthProvider from "./context/AuthContext";
+import ApolloWrapper from "./provider/ApolloProvider";
 
 const theme = createTheme({
   palette: {
-    mode: "light",
+    mode: "dark",
     primary: { main: "#1976d2" },
   },
 });
@@ -18,14 +19,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          <ApolloProvider client={client}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <Layout>{children}</Layout>
-            </ThemeProvider>
-          </ApolloProvider>
-        </AuthProvider>
+        <ApolloWrapper>
+          <AuthProvider>
+            <ApolloProvider client={client}>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Layout>{children}</Layout>
+              </ThemeProvider>
+            </ApolloProvider>
+          </AuthProvider>
+        </ApolloWrapper>
       </body>
     </html>
   );
