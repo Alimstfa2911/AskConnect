@@ -1,5 +1,6 @@
 type Query {
   users: [User]
+  getAllUsers: [User!]!
   profile: User
   questions: [Question]
   question(id: ID!): Question
@@ -39,6 +40,8 @@ type Mutation {
   forgotPassword(email: String!): MessageResponse!
 
   resetPassword(token: String!, newPassword: String!): MessageResponse!
+
+  updateUserRole(userId: ID!, role: String!): User
 }
 
 # type Subscription {

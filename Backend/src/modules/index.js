@@ -5,6 +5,7 @@ import {
   questionMutation,
   questionVoteMutation,
   userMutation,
+  adminMutation
 } from "./mutation.js";
 import { answerQuery, questionQuery, userQuery } from "./query.js";
 // import { userSubscription } from "./subscription.js";
@@ -67,4 +68,10 @@ export const mailMutationModule = {
   Mutation: {
     ...mailMutation,
   },
+};
+
+export const adminMutationModule = {
+  Mutation: {
+    ...adminMutation
+  }
 };

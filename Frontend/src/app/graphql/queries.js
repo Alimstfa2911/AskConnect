@@ -18,6 +18,7 @@ export const PROFILE = gql`
             title
         }
       }
+      role
     }
   }
 `;
@@ -99,6 +100,17 @@ export const SEARCH_QUESTIONS = gql`
         id
       }
       createdAt
+    }
+  }
+`;
+
+export const GET_ALL_USERS = gql`
+  query GetAllUsers {
+    getAllUsers {
+      id
+      name
+      email
+      role
     }
   }
 `;

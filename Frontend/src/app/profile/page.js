@@ -1,29 +1,32 @@
 "use client";
 
-import { Box, Typography, CircularProgress, Card, CardContent, Avatar } from "@mui/material";
+import { useContext } from "react";
+import { Box, Typography, Card, Avatar } from "@mui/material";
 import { PROFILE } from "../graphql/queries";
 import { useQuery } from "@apollo/client/react";
+import { AuthContext } from "../context/AuthContext";
+import UserTable from "../admin/dashboard/components/UserTable";
 
 export default function ProfilePage() {
+  const { user } = useContext(AuthContext); // get logged-in user info
   const { loading, error, data } = useQuery(PROFILE);
 
-  if (loading) {
+  if (loading)
     return (
       <Box display="flex" justifyContent="center" mt={5}>
-        <CircularProgress />
+        <Typography>Loading...</Typography>
       </Box>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
       <Box display="flex" justifyContent="center" mt={5}>
         <Typography color="error">{error.message}</Typography>
       </Box>
     );
-  }
 
   const { profile } = data;
+  console.log("User :", profile);
 
   return (
     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4, mt: 5, px: 2, justifyContent: "center" }}>
@@ -39,6 +42,7 @@ export default function ProfilePage() {
         />
         <Typography variant="h6"><strong>Name:</strong> {profile.name}</Typography>
         <Typography variant="body2"><strong>Email:</strong> {profile.email}</Typography>
+        <Typography variant="body2"><strong>Role:</strong> {profile?.role || "user"}</Typography>
       </Card>
 
       {/* Right Column: Questions & Answers */}
@@ -74,6 +78,16 @@ export default function ProfilePage() {
             <Typography>No answers given yet</Typography>
           )}
         </Card>
+
+        {/* Admin-only Section */}
+        {profile?.role === "admin" && (
+          <Card sx={{ p: 2, boxShadow: 3, borderRadius: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              👑 Admin Panel - Users
+            </Typography>
+            <UserTable /> {/* show all users for admin */}
+          </Card>
+        )}
       </Box>
     </Box>
   );

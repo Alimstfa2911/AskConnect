@@ -10,6 +10,14 @@ export const userQuery = {
     return users;
   },
 
+  getAllUsers: async (_, __, context) => {
+    console.log("Context in getAllUsers:", context);
+    if(!context.user || context.user.role !== "admin"){
+      return new Error("Not authorized")
+    }
+    return await User.find();
+  },
+
   profile: async (_, __, context) => {
     authCheck(context);
     return User.findById(context.user.id)
@@ -20,7 +28,6 @@ export const userQuery = {
       });
   },
 };
-
 
 export const questionQuery = {
   searchQuestions: async (_, { keyword, authorId, fromDate, toDate }) => {

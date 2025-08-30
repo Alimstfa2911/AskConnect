@@ -7,7 +7,7 @@ import { pubsub } from "../schema/pubsub.js";
 import { Question } from "../models/questionSchema.js";
 import { Answer } from "../models/answerSchema.js";
 import { transporter } from "../utils/mailer.js";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -47,12 +47,12 @@ export const userMutation = {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
       "SECRET_KEY",
       { expiresIn: "7d" }
     );
-    console.log("Token :", token);
-
+    
     return {
       token,
       user,
@@ -243,7 +243,7 @@ export const answerVoteMutation = {
 export const mailMutation = {
   forgotPassword: async (_, { email }, context) => {
     const user = await User.findOne({ email });
-    
+
     console.log("Check for user conetxt", user);
 
     const token = jwt.sign(
@@ -269,7 +269,7 @@ export const mailMutation = {
     return { message: "Password reset email sent" };
   },
 
-  resetPassword: async (_, { token, newPassword }, context ) => {
+  resetPassword: async (_, { token, newPassword }, context) => {
     try {
       const decoded = jwt.verify(token, "SECRET_KEY");
       const user = await User.findById(decoded.id);
@@ -282,5 +282,21 @@ export const mailMutation = {
     } catch (err) {
       throw new Error("Invalid or expired token");
     }
+  },
+};
+
+export const adminMutation = {
+  updateUserRole: async (_, { userId, role }, context) => {
+    if (!context.user || context.user.role !== "admin") {
+      throw new Error("Not authorized");
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { role },
+      { new: true }
+    );
+
+    return updatedUser;
   },
 };

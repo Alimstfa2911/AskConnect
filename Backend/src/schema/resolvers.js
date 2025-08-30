@@ -1,4 +1,5 @@
 import {
+  adminMutationModule,
   answerMutationModule,
   answerQueryModule,
   answerVoteMutationModule,
@@ -10,7 +11,7 @@ import {
   userQueryModule,
 } from "../modules/index.js";
 
-import { questionMutation } from "../modules/mutation.js";
+import { adminMutation, questionMutation } from "../modules/mutation.js";
 
 // 4. Define Resolvers → interact with DB
 export const resolvers = {
@@ -26,7 +27,8 @@ export const resolvers = {
     ...questionVoteMutationModule.Mutation,
     ...answerMutationModule.Mutation,
     ...answerVoteMutationModule.Mutation,
-    ...mailMutationModule.Mutation
+    ...mailMutationModule.Mutation,
+    ...adminMutationModule.Mutation
   },
   User: {
     id: (parent) => parent?._id?.toString() || parent?.id || null,
