@@ -43,5 +43,12 @@ type MessageResponse {
   message: String!
 }
 
+type Notification {
+  id: ID!
+  userId: ID!
+  message: String!
+  createdAt: String!
+}
+
 
 

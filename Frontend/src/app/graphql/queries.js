@@ -119,3 +119,14 @@ export const GET_ALL_USERS = gql`
     }
   }
 `;
+
+export const GET_NOTIFICATIONS = gql`
+  query {
+    getNotifications {
+      id
+      message
+      isRead
+      createdAt
+    }
+  }
+`;

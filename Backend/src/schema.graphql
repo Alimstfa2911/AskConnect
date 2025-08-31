@@ -46,8 +46,10 @@ type Mutation {
   changeUserRole(id: ID!, role: String!): MessageResponse
 
   deleteUser(id: ID!): MessageResponse
+
+  createNotification(userId: String!, message: String!): Notification
 }
 
-# type Subscription {
-#     messageAdded: Message!
-# }
+type Subscription {
+  notificationAdded(userId: ID!): Notification!
+}

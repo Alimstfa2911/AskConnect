@@ -5,9 +5,10 @@ import {
   questionMutation,
   questionVoteMutation,
   userMutation,
-  adminMutation
+  adminMutation,
 } from "./mutation.js";
 import { answerQuery, questionQuery, userQuery } from "./query.js";
+import { notificationResolvers } from "./subscription.js";
 // import { userSubscription } from "./subscription.js";
 
 export const userQueryModule = {
@@ -58,12 +59,6 @@ export const answerVoteMutationModule = {
   },
 };
 
-// export const userSubscriptionModule = {
-//     Subscription : {
-//         ...userSubscription
-//     }
-// }
-
 export const mailMutationModule = {
   Mutation: {
     ...mailMutation,
@@ -72,6 +67,15 @@ export const mailMutationModule = {
 
 export const adminMutationModule = {
   Mutation: {
-    ...adminMutation
-  }
+    ...adminMutation,
+  },
+};
+
+export const notificationModule = {
+  Mutation: {
+    ...notificationResolvers.Mutation,
+  },
+  Subscription: {
+    ...notificationResolvers.Subscription,
+  },
 };
