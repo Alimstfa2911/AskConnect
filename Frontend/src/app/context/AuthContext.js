@@ -7,9 +7,12 @@ export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const [loadingUser, setLoadingUser] = useState(true);
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
+
+    console.log("User :", userData);
 
     if (token && userData && userData !== "undefined") {
       try {
@@ -27,6 +30,7 @@ export default function AuthProvider({ children }) {
       setIsLoggedIn(false);
       setUser(null);
     }
+    setLoadingUser(false);
   }, []);
 
   const login = (token, user) => {
@@ -44,7 +48,9 @@ export default function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, setIsLoggedIn, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, isLoggedIn, setIsLoggedIn, login, logout, loadingUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

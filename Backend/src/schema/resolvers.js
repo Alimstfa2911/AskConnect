@@ -14,7 +14,6 @@ import {
 
 import { adminMutation, questionMutation } from "../modules/mutation.js";
 
-// 4. Define Resolvers → interact with DB
 export const resolvers = {
   Query: {
     ...userQueryModule.Query,

@@ -4,8 +4,11 @@ const pubsub = new PubSub();
 export const notificationResolvers = {
   Subscription: {
     notificationAdded: {
-      subscribe: (_, { userId }) => pubsub.asyncIterator(`NOTIFICATION_${userId}`)
-    }
+      subscribe: (_, { userId }) =>
+        pubsub.asyncIterator(
+          `NOTIFICATION_${userId}`,
+        ),
+    },
   },
   Mutation: {
     createNotification: async (_, { userId, message }) => {
@@ -13,11 +16,12 @@ export const notificationResolvers = {
         id: new Date().getTime().toString(),
         userId,
         message,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
-      // save in DB if required
-      pubsub.publish(`NOTIFICATION_${userId}`, { notificationAdded: notification });
+      pubsub.publish(`NOTIFICATION_${userId}`, {
+        notificationAdded: notification,
+      });
       return notification;
-    }
-  }
+    },
+  },
 };

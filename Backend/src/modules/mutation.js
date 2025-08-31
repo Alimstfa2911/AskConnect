@@ -29,7 +29,6 @@ export const userMutation = {
     const token = jwt.sign({ id: newUser._id }, "SECRET_KEY", {
       expiresIn: "7d",
     });
-    console.log(token);
     return { token, user: newUser };
   },
 
@@ -84,7 +83,7 @@ export const userMutation = {
 
 export const questionMutation = {
   createQuestion: async (_, { title, description }, context) => {
-    console.log("Create Question :");
+ 
     authCheck(context);
 
     const question = await Question.create({
@@ -97,7 +96,20 @@ export const questionMutation = {
       $push: { questions: question._id },
     });
 
-    console.log("Question :", question);
+    const admins = await User.find({ role: "ADMIN" }); // assuming your User schema has a role field
+
+    admins.forEach((admin) => {
+      const notification = {
+        id: new Date().getTime().toString(),
+        userId: admin._id.toString(),
+        message: `New question posted: ${title}`,
+        createdAt: new Date().toISOString(),
+      };
+
+      pubsub.publish(`NOTIFICATION_${admin._id}`, {
+        notificationAdded: notification,
+      });
+    });
 
     return await question.populate("author");
   },
@@ -106,7 +118,6 @@ export const questionMutation = {
     if (!context.user || context.user.role !== "admin") {
       throw new Error("Not authorized");
     }
-    console.log("COntext in deleteMutation :", context);
 
     const question = await Question.findById(id);
     if (!question) {
@@ -114,7 +125,6 @@ export const questionMutation = {
     }
 
     const answerId = question.answers;
-    console.log("AnswerID :", answerId);
 
     await Answer.deleteMany({ question: id });
 
@@ -137,16 +147,13 @@ export const questionVoteMutation = {
 
     if (existingVote) {
       if (existingVote.value === 1) {
-        // User already upvoted → remove vote
         question.votes = question.votes.filter(
           (v) => v.user.toString() !== context.user.id
         );
       } else {
-        // Switch from downvote to upvote
         existingVote.value = 1;
       }
     } else {
-      // Add new upvote
       question.votes.push({ user: context.user.id, value: 1 });
     }
 
@@ -166,16 +173,13 @@ export const questionVoteMutation = {
 
     if (existingVote) {
       if (existingVote.value === -1) {
-        // User already downvoted → remove vote
         question.votes = question.votes.filter(
           (v) => v.user.toString() !== context.user.id
         );
       } else {
-        // Switch from upvote to downvote
         existingVote.value = -1;
       }
     } else {
-      // Add new downvote
       question.votes.push({ user: context.user.id, value: -1 });
     }
 
@@ -203,6 +207,18 @@ export const answerMutation = {
 
     await User.findByIdAndUpdate(context.user.id, {
       $push: { answers: answer._id },
+    });
+
+    const admins = await User.find({ role: "admin" });
+    admins.forEach((admin) => {
+      pubsub.publish(`NOTIFICATION_${admin.id}`, {
+        notificationAdded: {
+          id: new Date().getTime().toString(),
+          userId: admin.id,
+          message: `${context.user.name} added a new answer to "${question.title}"`,
+          createdAt: new Date().toISOString(),
+        },
+      });
     });
 
     console.log("Answer :", answer);
@@ -236,7 +252,7 @@ export const answerVoteMutation = {
     } else {
       answer.votes.push({ user: context.user.id, value: 1 });
     }
-    console.log("Existing vote :", existingVote);
+
     await answer.save();
     return await answer.populate([
       "author",
@@ -279,8 +295,6 @@ export const answerVoteMutation = {
 export const mailMutation = {
   forgotPassword: async (_, { email }, context) => {
     const user = await User.findOne({ email });
-
-    console.log("Check for user conetxt", user);
 
     const token = jwt.sign(
       {
@@ -336,5 +350,3 @@ export const adminMutation = {
     return updatedUser;
   },
 };
-
-

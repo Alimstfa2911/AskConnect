@@ -11,6 +11,7 @@ import NotificationBell from "../notification/page";
 export default function Navbar() {
   const router = useRouter();
   const { isLoggedIn, user, logout } = useContext(AuthContext);
+  console.log("User id:", user);
 
   const handleLogout = () => {
     logout();
@@ -39,8 +40,11 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            {/* 🔔 Show notifications for logged-in users */}
-            <NotificationBell userId={user?.id} />
+            {isLoggedIn && user ? (
+              <NotificationBell userId={user.id.toString()} />
+            ) : (
+              (console.log("Notification user null", null), null)
+            )}
 
             {user?.role === "admin" && (
               <Button
@@ -50,6 +54,7 @@ export default function Navbar() {
                 Admin Dashboard
               </Button>
             )}
+
             <Button color="inherit" onClick={() => router.push("/profile")}>
               Profile
             </Button>
