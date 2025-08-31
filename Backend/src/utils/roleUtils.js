@@ -1,3 +1,3 @@
 export const roleCheck = (context) => {
-  if (context.user.role !== "Admin") throw new Error("UnAuthorized to Delete");
+  if (context.user.role !== "admin") throw new Error("UnAuthorized to Delete");
 };

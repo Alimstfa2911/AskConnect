@@ -30,7 +30,11 @@ export const GET_ALL_QUESTIONS = gql`
       title
       description
       author {
+        id
         name
+      }
+      answers {
+        id
       }
       votes {
         user {
@@ -38,6 +42,7 @@ export const GET_ALL_QUESTIONS = gql`
         }
         value
       }
+       createdAt
     }
   }
 `;

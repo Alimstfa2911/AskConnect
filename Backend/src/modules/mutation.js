@@ -52,7 +52,7 @@ export const userMutation = {
       "SECRET_KEY",
       { expiresIn: "7d" }
     );
-    
+
     return {
       token,
       user,
@@ -61,9 +61,26 @@ export const userMutation = {
 
   deleteUser: async (_, { id }, context) => {
     authCheck(context);
-    console.log("Context:", context);
     roleCheck(context);
-    return await User.findByIdAndDelete(id);
+    await User.findByIdAndDelete(id);
+    return { message: "User deleted successfully" };
+  },
+
+  changeUserRole: async (_, { id, role }, context) => {
+    if (!context.user || context.user.role !== "admin") {
+      throw new Error("Not authorized");
+    }
+
+    const user = await User.findById(id);
+    if (!user) throw new Error("User not found");
+
+    if (user.role !== "user" && user.role !== "admin") {
+      throw new Error("Invalid role");
+    }
+
+    user.role = role;
+    await user.save();
+    return user;
   },
 };
 
@@ -85,6 +102,27 @@ export const questionMutation = {
     console.log("Question :", question);
 
     return await question.populate("author");
+  },
+
+  deleteQuestion: async (_, { id }, context) => {
+    if (!context.user || context.user.role !== "admin") {
+      throw new Error("Not authorized");
+    }
+    console.log("COntext in deleteMutation :", context);
+
+    const question = await Question.findById(id);
+    if (!question) {
+      throw new Error("Question not found");
+    }
+
+    const answerId = question.answers;
+    console.log("AnswerID :", answerId);
+
+    await Answer.deleteMany({ question: id });
+
+    await Question.findByIdAndDelete(id);
+
+    return question;
   },
 };
 

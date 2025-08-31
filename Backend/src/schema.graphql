@@ -23,8 +23,6 @@ type Mutation {
 
   loginUser(email: String!, password: String!): AuthPayload!
 
-  deleteUser(id: String!): User
-
   createQuestion(title: String!, description: String!): Question
 
   upvoteQuestion(questionId: ID!): Question
@@ -42,6 +40,12 @@ type Mutation {
   resetPassword(token: String!, newPassword: String!): MessageResponse!
 
   updateUserRole(userId: ID!, role: String!): User
+
+  deleteQuestion(id: ID!): Question
+
+  changeUserRole(id: ID!, role: String!): User!
+
+  deleteUser(id: ID!): MessageResponse
 }
 
 # type Subscription {

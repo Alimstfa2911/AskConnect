@@ -28,7 +28,7 @@ type Answer {
   id: ID
   text: String
   author: User
-  question: Question!
+  question: Question
   votes: [Vote]
   createdAt: String!
   updatedAt: String!
@@ -42,3 +42,6 @@ type Vote {
 type MessageResponse {
   message: String!
 }
+
+
+

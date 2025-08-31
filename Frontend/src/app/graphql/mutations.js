@@ -16,8 +16,18 @@ export const ADD_ANSWER = gql`
 `;
 
 export const REGISTER = gql`
-  mutation Register($name: String!, $email: String!, $password: String!, $avatar: String) {
-    registerUser(name: $name, email: $email, password: $password, avatar: $avatar) {
+  mutation Register(
+    $name: String!
+    $email: String!
+    $password: String!
+    $avatar: String
+  ) {
+    registerUser(
+      name: $name
+      email: $email
+      password: $password
+      avatar: $avatar
+    ) {
       token
       user {
         id
@@ -155,6 +165,33 @@ export const UPDATE_USER_ROLE = gql`
       name
       email
       role
+    }
+  }
+`;
+
+export const DELETE_QUESTION = gql`
+  mutation DeleteQuestion($id: ID!) {
+    deleteQuestion(id: $id) {
+      id
+    }
+  }
+`;
+
+export const CHANGE_USER_ROLE = gql`
+  mutation ChangeUserRole($id: ID!, $role: String!) {
+    changeUserRole(id: $id, role: $role) {
+      id
+      name
+      email
+      role
+    }
+  }
+`;
+
+export const DELETE_USER = gql`
+  mutation DeleteUser($id: ID!) {
+    deleteUser(id: $id) {
+      message
     }
   }
 `;
