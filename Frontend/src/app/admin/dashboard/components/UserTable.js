@@ -14,23 +14,25 @@ import {
   DialogTitle,
   CircularProgress,
   Box,
+  Snackbar,
   Alert,
 } from "@mui/material";
 
 export default function UserTable() {
-  const { loading, error, data } = useQuery(GET_ALL_USERS);
-  const [deleteUser] = useMutation(DELETE_USER, {
-    refetchQueries: [{ query: GET_ALL_USERS }],
-  });
-  const [changeUserRole] = useMutation(CHANGE_USER_ROLE, {
-    refetchQueries: [{ query: GET_ALL_USERS }],
-  });
+  const { loading, error, data, refetch } = useQuery(GET_ALL_USERS);
+
+  const [deleteUser] = useMutation(DELETE_USER);
+  const [changeUserRole] = useMutation(CHANGE_USER_ROLE);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [mutationError, setMutationError] = useState("");
   const [roleLoading, setRoleLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  // Snackbar state
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   if (loading)
     return (
@@ -51,12 +53,18 @@ export default function UserTable() {
   const handleConfirmDelete = async () => {
     try {
       setDeleteLoading(true);
-      await deleteUser({ variables: { id: selectedUser.id } }); // Correct variable name
+      const res = await deleteUser({ variables: { id: selectedUser.id } });
+      setSnackbarMessage(res.data.deleteUser.message);
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
       setOpenDialog(false);
       setSelectedUser(null);
-      setDeleteLoading(false);
+      refetch();
     } catch (err) {
-      setMutationError(err.message);
+      setSnackbarMessage(err.message);
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    } finally {
       setDeleteLoading(false);
     }
   };
@@ -70,10 +78,16 @@ export default function UserTable() {
   const handleChangeRole = async (id, role) => {
     try {
       setRoleLoading(true);
-      await changeUserRole({ variables: { id, role } }); // Correct variable names
-      setRoleLoading(false);
+      const res = await changeUserRole({ variables: { id, role } });
+      setSnackbarMessage(res.data.changeUserRole.message);
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+      refetch();
     } catch (err) {
-      setMutationError(err.message);
+      setSnackbarMessage(err.message);
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    } finally {
       setRoleLoading(false);
     }
   };
@@ -117,12 +131,6 @@ export default function UserTable() {
 
   return (
     <>
-      {mutationError && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {mutationError}
-        </Alert>
-      )}
-
       <div style={{ height: 500, width: "100%" }}>
         <DataGrid
           rows={users}
@@ -151,6 +159,18 @@ export default function UserTable() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Snackbar for Success & Errors */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert severity={snackbarSeverity} sx={{ width: "100%" }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
