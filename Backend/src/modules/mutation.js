@@ -67,20 +67,18 @@ export const userMutation = {
   },
 
   changeUserRole: async (_, { id, role }, context) => {
-    if (!context.user || context.user.role !== "admin") {
-      throw new Error("Not authorized");
-    }
+    authCheck(context);
+    roleCheck(context);
 
     const user = await User.findById(id);
-    if (!user) throw new Error("User not found");
-
-    if (user.role !== "user" && user.role !== "admin") {
-      throw new Error("Invalid role");
+    if (!user) {
+      throw new Error("User not found");
     }
 
     user.role = role;
     await user.save();
-    return user;
+
+    return { message: `User role updated to ${role} successfully` };
   },
 };
 

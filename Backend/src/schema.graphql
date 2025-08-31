@@ -43,7 +43,7 @@ type Mutation {
 
   deleteQuestion(id: ID!): Question
 
-  changeUserRole(id: ID!, role: String!): User!
+  changeUserRole(id: ID!, role: String!): MessageResponse
 
   deleteUser(id: ID!): MessageResponse
 }

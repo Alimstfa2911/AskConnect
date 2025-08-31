@@ -180,10 +180,7 @@ export const DELETE_QUESTION = gql`
 export const CHANGE_USER_ROLE = gql`
   mutation ChangeUserRole($id: ID!, $role: String!) {
     changeUserRole(id: $id, role: $role) {
-      id
-      name
-      email
-      role
+      message
     }
   }
 `;
