@@ -58,7 +58,7 @@ app.use(
         }
       }
 
-      return { user }; 
+      return { user };
     },
   })
 );
@@ -71,7 +71,16 @@ const wsServer = new WebSocketServer({
 useServer(
   {
     schema,
-    context: () => ({ pubsub }),
+    context: ({ connectionParams }) => {
+      console.log("WS connectionParams:", connectionParams);
+      return { pubsub };
+    },
+    onConnect: (ctx) => {
+      console.log("WS onConnect called:", ctx.connectionParams);
+    },
+    onDisconnect: (ctx, code, reason) => {
+      console.log("WS disconnected:", code, reason);
+    },
   },
   wsServer
 );

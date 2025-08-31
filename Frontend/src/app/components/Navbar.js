@@ -7,63 +7,63 @@ import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "../context/AuthContext";
 import NotificationBell from "../notification/page";
-
 export default function Navbar() {
   const router = useRouter();
   const { isLoggedIn, user, logout } = useContext(AuthContext);
-  console.log("User id:", user);
-
+  console.log("User id in navBar:", user?.id);
   const handleLogout = () => {
     logout();
     router.push("/");
   };
-
   return (
     <AppBar position="fixed" sx={{ backgroundColor: "#1864ab", zIndex: 1300 }}>
+      {" "}
       <Toolbar sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+        {" "}
         <Typography
           variant="h6"
           sx={{ flexGrow: 1, cursor: "pointer" }}
           onClick={() => router.push("/")}
         >
-          AskConnect
-        </Typography>
-
+          {" "}
+          AskConnect{" "}
+        </Typography>{" "}
         {!isLoggedIn ? (
           <>
+            {" "}
             <Button color="inherit" onClick={() => router.push("/login")}>
-              Login
-            </Button>
+              {" "}
+              Login{" "}
+            </Button>{" "}
             <Button color="inherit" onClick={() => router.push("/register")}>
-              Register
-            </Button>
+              {" "}
+              Register{" "}
+            </Button>{" "}
           </>
         ) : (
           <>
-            {isLoggedIn && user ? (
-              <NotificationBell userId={user.id.toString()} />
-            ) : (
-              (console.log("Notification user null", null), null)
-            )}
-
+            {" "}
+            {user && <NotificationBell userId={user.id} />}{" "}
             {user?.role === "admin" && (
               <Button
                 color="inherit"
                 onClick={() => router.push("/admin/dashboard")}
               >
-                Admin Dashboard
+                {" "}
+                Admin Dashboard{" "}
               </Button>
-            )}
-
+            )}{" "}
             <Button color="inherit" onClick={() => router.push("/profile")}>
-              Profile
-            </Button>
+              {" "}
+              Profile{" "}
+            </Button>{" "}
             <Button color="inherit" onClick={handleLogout}>
-              Logout
-            </Button>
+              {" "}
+              Logout{" "}
+            </Button>{" "}
           </>
-        )}
-      </Toolbar>
+        )}{" "}
+      </Toolbar>{" "}
     </AppBar>
   );
 }

@@ -18,7 +18,9 @@ export const userQuery = {
   },
 
   profile: async (_, __, context) => {
+    console.log("Profile in mutation");
     authCheck(context);
+    console.log("After authChcek");
     return User.findById(context.user.id)
       .populate("questions")
       .populate({
@@ -50,7 +52,6 @@ export const questionQuery = {
     const questions = await Question.find()
       .populate("author")
       .populate("votes.user");
-    console.log("Questions :", questions);
     return questions;
   },
 

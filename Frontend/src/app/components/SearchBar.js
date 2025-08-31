@@ -1,19 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Box,
   TextField,
   Button,
   Typography,
   InputAdornment,
+  Tooltip,
 } from "@mui/material";
 import { SEARCH_QUESTIONS } from "../graphql/queries";
 import QuestionCard from "./QuestionCard";
 import { useLazyQuery } from "@apollo/client/react";
+import { useRouter } from "next/navigation";
+import { AuthContext } from "../context/AuthContext";
 
 export default function SearchBar() {
   const [keyword, setKeyword] = useState("");
+  const router = useRouter();
+
+  const { user, isLoggedIn } = useContext(AuthContext);
 
   const [searchQuestions, { data, loading, error }] =
     useLazyQuery(SEARCH_QUESTIONS);
@@ -46,16 +52,15 @@ export default function SearchBar() {
           specialists!
         </Typography>
 
-        <Box display="flex" justifyContent="center">
+        <Box display="flex" justifyContent="center" gap={1} sx={{ mb: 3 }}>
           <TextField
             placeholder="Search the community"
             variant="outlined"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             sx={{
-              width: "100%",
+              flex: 1,
               maxWidth: 500,
-              borderRadius: "50px",
               "& .MuiOutlinedInput-root": {
                 borderRadius: "50px",
               },
@@ -66,6 +71,31 @@ export default function SearchBar() {
               ),
             }}
           />
+
+          <Tooltip title={isLoggedIn ? "" : "Login to ask a question"}>
+            <span>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  if (isLoggedIn) {
+                    router.push("/createQuestion");
+                  } else {
+                    router.push("/login");
+                  }
+                }}
+                disabled={!isLoggedIn}
+                sx={{
+                  borderRadius: "50px",
+                  height: "56px",
+                  textTransform: "none",
+                  px: 4,
+                }}
+              >
+                Ask Question
+              </Button>
+            </span>
+          </Tooltip>
         </Box>
       </Box>
 

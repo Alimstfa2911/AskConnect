@@ -1,32 +1,28 @@
 "use client";
 import { createContext, useState, useEffect } from "react";
-
 export const AuthContext = createContext();
-
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const [loadingUser, setLoadingUser] = useState(true);
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
-
-    console.log("User :", userData);
-
+    console.log("User in context:", userData);
     if (token && userData && userData !== "undefined") {
+      console.log("Token :", token);
       try {
         const parsedUser = JSON.parse(userData);
         setIsLoggedIn(true);
         setUser(parsedUser);
       } catch (err) {
         console.error("Failed to parse user from localStorage:", err);
-        localStorage.removeItem("user"); // remove corrupted data
+        localStorage.removeItem("user");
         setIsLoggedIn(false);
         setUser(null);
       }
     } else {
-      // clear inconsistent state
+      
       setIsLoggedIn(false);
       setUser(null);
     }
@@ -51,7 +47,8 @@ export default function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{ user, isLoggedIn, setIsLoggedIn, login, logout, loadingUser }}
     >
-      {children}
+      {" "}
+      {children}{" "}
     </AuthContext.Provider>
   );
 }

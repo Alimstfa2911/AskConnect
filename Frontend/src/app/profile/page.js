@@ -9,10 +9,15 @@ import UserTable from "../admin/dashboard/components/UserTable";
 import QuestionsTable from "../admin/dashboard/components/QuestionTable";
 
 export default function ProfilePage() {
-  const { user } = useContext(AuthContext); // get logged-in user info
-  const { loading, error, data } = useQuery(PROFILE);
+  const { user, loadingUser } = useContext(AuthContext);
+  console.log("LoadingUser :", loadingUser);
+  // Wait for user context to load
+  const { loading, error, data } = useQuery(PROFILE, {
+    skip: !user
+  });
+  console.log("Data in profile :", data);
 
-  if (loading)
+  if (loadingUser || loading)
     return (
       <Box display="flex" justifyContent="center" mt={5}>
         <Typography>Loading...</Typography>
@@ -26,8 +31,7 @@ export default function ProfilePage() {
       </Box>
     );
 
-  const { profile } = data;
-  console.log("User :", profile);
+  const profile = data?.profile;
 
   return (
     <Box
@@ -54,15 +58,15 @@ export default function ProfilePage() {
           Profile
         </Typography>
         <Avatar
-          src={profile.avatar || "/profile.jpg"}
-          alt={profile.name}
+          src={profile?.avatar || "/profile.jpg"}
+          alt={profile?.name}
           sx={{ width: 100, height: 100, mx: "auto", mb: 2 }}
         />
         <Typography variant="h6">
-          <strong>Name:</strong> {profile.name}
+          <strong>Name:</strong> {profile?.name}
         </Typography>
         <Typography variant="body2">
-          <strong>Email:</strong> {profile.email}
+          <strong>Email:</strong> {profile?.email}
         </Typography>
         <Typography variant="body2">
           <strong>Role:</strong> {profile?.role || "user"}
@@ -71,36 +75,30 @@ export default function ProfilePage() {
 
       {/* Right Column: Questions & Answers */}
       <Box flex="2 1 600px" display="flex" flexDirection="column" gap={3}>
-        {/* Questions Card */}
         <Card sx={{ p: 2, boxShadow: 3, borderRadius: 3 }}>
           <Typography variant="h6" gutterBottom>
             📝 Questions Asked
           </Typography>
-          {profile.questions && profile.questions.length > 0 ? (
-            profile.questions.map((q) => (
-              <Typography key={q.id} sx={{ mb: 1 }}>
-                📝 {q.title}
-              </Typography>
-            ))
-          ) : (
-            <Typography>No questions asked yet</Typography>
-          )}
+          {profile?.questions?.length > 0
+            ? profile?.questions.map((q) => (
+                <Typography key={q.id} sx={{ mb: 1 }}>
+                  📝 {q.title}
+                </Typography>
+              ))
+            : <Typography>No questions asked yet</Typography>}
         </Card>
 
-        {/* Answers Card */}
         <Card sx={{ p: 2, boxShadow: 3, borderRadius: 3 }}>
           <Typography variant="h6" gutterBottom>
             💬 Answers Given
           </Typography>
-          {profile.answers && profile.answers.length > 0 ? (
-            profile.answers.map((a) => (
-              <Typography key={a.id} sx={{ mb: 1 }}>
-                💬 {a.text} (on: {a.question.title})
-              </Typography>
-            ))
-          ) : (
-            <Typography>No answers given yet</Typography>
-          )}
+          {profile?.answers?.length > 0
+            ? profile.answers.map((a) => (
+                <Typography key={a.id} sx={{ mb: 1 }}>
+                  💬 {a.text} (on: {a.question.title})
+                </Typography>
+              ))
+            : <Typography>No answers given yet</Typography>}
         </Card>
 
         {/* Admin-only Section */}
@@ -110,11 +108,11 @@ export default function ProfilePage() {
               <Typography variant="h6" gutterBottom>
                 👑 Admin Panel - Users
               </Typography>
-              <UserTable /> {/* show all users for admin */}
+              <UserTable />
             </Card>
             <Card sx={{ mb: 3, p: 2 }}>
               <Typography variant="h6">All Questions</Typography>
-              <QuestionsTable /> {/* New component */}
+              <QuestionsTable />
             </Card>
           </>
         )}

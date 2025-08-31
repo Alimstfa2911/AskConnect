@@ -17,7 +17,7 @@ export default function ResetPassword() {
     e.preventDefault();
     const res = await resetPassword({ variables: { token, newPassword: password } });
     if (res.data) {
-      setTimeout(() => router.push("/login"), 2000);
+      setTimeout(() => router.push("/login"), 1000);
     }
   };
 

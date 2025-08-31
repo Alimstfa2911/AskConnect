@@ -1,17 +1,22 @@
 "use client";
 
-import { Box, Card, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, Card, CircularProgress, Typography } from "@mui/material";
 import client from "./lib/apolloClient";
 import { useQuery } from "@apollo/client/react";
 import { GET_ALL_QUESTIONS } from "./graphql/queries";
 import QuestionCard from "./components/QuestionCard";
 import SearchBar from "./components/SearchBar";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "./context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
   const { _, error, data } = useQuery(GET_ALL_QUESTIONS, { client });
+  const router = useRouter();
 
-
+  const { user} = useContext(AuthContext);
+  console.log("User in homepage:", user);
+  
   if (error) {
     return (
       <Box display="flex" justifyContent="center" mt={5}>
@@ -31,10 +36,12 @@ export default function HomePage() {
   return (
     <Box sx={{ width: "100%", maxWidth: 1200, mx: "auto", mt: 4, px: 2 }}>
       <SearchBar />
+      
 
       <Card sx={{ p: 3, mt: 3, boxShadow: 3, borderRadius: 3 }}>
         <Typography variant="h5" sx={{ mb: 2 }}>
           Recent Discussions
+          
         </Typography>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>

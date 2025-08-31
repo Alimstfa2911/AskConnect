@@ -83,9 +83,8 @@ export const userMutation = {
 
 export const questionMutation = {
   createQuestion: async (_, { title, description }, context) => {
- 
     authCheck(context);
-
+    console.log("User from context in createQUestion :", context);
     const question = await Question.create({
       title,
       description,
@@ -96,18 +95,17 @@ export const questionMutation = {
       $push: { questions: question._id },
     });
 
-    const admins = await User.find({ role: "ADMIN" }); // assuming your User schema has a role field
+    const admins = await User.find({ role: "admin" }); // assuming your User schema has a role field
 
     admins.forEach((admin) => {
-      const notification = {
-        id: new Date().getTime().toString(),
-        userId: admin._id.toString(),
-        message: `New question posted: ${title}`,
-        createdAt: new Date().toISOString(),
-      };
-
-      pubsub.publish(`NOTIFICATION_${admin._id}`, {
-        notificationAdded: notification,
+      console.log("Admin id:", admin.id);
+      pubsub.publish(`NOTIFICATION_${admin.id}`, {
+        notificationAdded: {
+          id: new Date().getTime().toString(),
+          userId: admin.id,
+          message: `${context.user.name} added a new question: "${title}"`,
+          createdAt: new Date().toISOString(),
+        },
       });
     });
 
@@ -191,7 +189,6 @@ export const questionVoteMutation = {
 export const answerMutation = {
   addAnswer: async (_, { questionId, text }, context) => {
     authCheck(context);
-
     const question = await Question.findById(questionId);
     if (!question) throw new Error("Question not found");
 
@@ -210,7 +207,9 @@ export const answerMutation = {
     });
 
     const admins = await User.find({ role: "admin" });
+
     admins.forEach((admin) => {
+      console.log("Admin id in addAnswer:", typeof admin.id);
       pubsub.publish(`NOTIFICATION_${admin.id}`, {
         notificationAdded: {
           id: new Date().getTime().toString(),
@@ -221,7 +220,8 @@ export const answerMutation = {
       });
     });
 
-    console.log("Answer :", answer);
+    console.log("All notifications published for admins");
+    
     return await answer.populate([
       "author",
       "question",

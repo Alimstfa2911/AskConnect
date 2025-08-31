@@ -7,6 +7,7 @@ import client from "./lib/apolloClient";
 import Layout from "./components/Layout";
 import AuthProvider from "./context/AuthContext";
 import ApolloWrapper from "./provider/ApolloProvider";
+import { NotificationProvider } from "./context/NotificationContext";
 
 const theme = createTheme({
   palette: {
@@ -21,12 +22,14 @@ export default function RootLayout({ children }) {
       <body>
         <ApolloWrapper>
           <AuthProvider>
-            <ApolloProvider client={client}>
-              <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <Layout>{children}</Layout>
-              </ThemeProvider>
-            </ApolloProvider>
+            <NotificationProvider>
+              <ApolloProvider client={client}>
+                <ThemeProvider theme={theme}>
+                  <CssBaseline />
+                  <Layout>{children}</Layout>
+                </ThemeProvider>
+              </ApolloProvider>
+            </NotificationProvider>
           </AuthProvider>
         </ApolloWrapper>
       </body>
