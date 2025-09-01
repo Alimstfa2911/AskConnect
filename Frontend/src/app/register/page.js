@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { AuthContext } from "../context/AuthContext";
 import { REGISTER } from "../graphql/mutations";
 import Template from "../pages/Template";
+import Register_image from "@/app/public/images/Register_image.jpg";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -133,7 +134,7 @@ export default function RegisterPage() {
     <Template
       title="Join with millions brilliant mind on AskConnect"
       description2="Ask, Share and grow"
-      // image={Register_image}
+      image={Register_image}
       form={form}
     />
   );

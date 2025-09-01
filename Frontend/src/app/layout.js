@@ -12,15 +12,15 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#3B82F6", // buttons, highlights
+      main: "#3B82F6", 
       contrastText: "#E5E7EB",
     },
     secondary: {
       main: "#2563EB",
     },
     background: {
-      default: "#111827", // page background
-      paper: "#1F2937", // cards, inputs
+      default: "#111827", 
+      paper: "#1F2937", 
     },
     text: {
       primary: "#E5E7EB",

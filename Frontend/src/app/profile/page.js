@@ -44,7 +44,6 @@ export default function ProfilePage() {
         justifyContent: "center",
       }}
     >
-      {/* Left Column: User Info */}
       <Card
         sx={{
           flex: "1 1 250px",
@@ -73,7 +72,6 @@ export default function ProfilePage() {
         </Typography>
       </Card>
 
-      {/* Right Column: Questions & Answers */}
       <Box flex="2 1 600px" display="flex" flexDirection="column" gap={3}>
         <Card sx={{ p: 2, boxShadow: 3, borderRadius: 3 }}>
           <Typography variant="h6" gutterBottom>
@@ -101,7 +99,6 @@ export default function ProfilePage() {
             : <Typography>No answers given yet</Typography>}
         </Card>
 
-        {/* Admin-only Section */}
         {profile?.role === "admin" && (
           <>
             <Card sx={{ p: 2, boxShadow: 3, borderRadius: 3 }}>

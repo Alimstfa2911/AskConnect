@@ -46,7 +46,7 @@ export default function QuestionCard({ question, hideViewButton = false }) {
   };
 
   return (
-    <Card sx={{ mb: 2, p: 1, backgroundColor: "#111827", color: "#E5E7EB" }}>
+    <Card sx={{  p: 5, backgroundColor: "#111827", color: "#E5E7EB" }}>
       <CardContent>
         <Typography variant="h6" sx={{ color: "#E5E7EB" }}>
           {question.title}

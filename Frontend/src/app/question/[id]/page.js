@@ -25,57 +25,61 @@ export default function QuestionDetailPage() {
   });
 
   const question = data?.question;
-  console.log("Quesyion :", question);
 
   if (error)
     return <Typography color="error">Error: {error?.message}</Typography>;
   if (!question) return <Typography>No question found</Typography>;
 
   return (
-    <Container sx={{ mt: 3 }}>
-      {/* Left Column - Question */}
+    <Container
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        flexGrow: 1, // take only available space
+        py: 4, // padding top-bottom
+      }}
+    >
       <Box
         sx={{
           display: "flex",
-          gap: 2, // space between columns
+          gap: 2,
           alignItems: "flex-start",
-          height: "80vh",
         }}
       >
-        {/* Left Column - Question */}
+        {/* Left - Question */}
         <Paper
           elevation={3}
           sx={{
             p: 2,
             borderRadius: 2,
-            width: "48%", // fixed width
+            width: "48%",
             display: "flex",
             flexDirection: "column",
-            overflow: "auto", // scroll if question is long
+            overflow: "auto",
           }}
         >
           <QuestionCard question={question} hideViewButton={true} />
         </Paper>
 
-        {/* Right Column - Answers */}
+        {/* Right - Answers */}
         <Paper
           elevation={3}
           sx={{
             p: 2,
             borderRadius: 2,
-            width: "48%", // fixed width
+            width: "48%",
             display: "flex",
             flexDirection: "column",
-            minHeight: 0,
-            height: "100%", // same height as left
+            height: "80vh", // fix height (same as left panel)
+            overflow: "hidden", // prevent outer overflow
           }}
         >
           <Typography variant="h5" sx={{ mb: 2 }}>
             Answers
           </Typography>
 
-          {/* Scrollable answers list */}
-          <Box sx={{ flex: 1, overflowY: "auto", mb: 2, minHeight: 0 }}>
+          {/* Scrollable section */}
+          <Box sx={{ flex: 1, overflowY: "auto", pr: 1 }}>
             {question.answers.length > 0 ? (
               question.answers.map((ans) => (
                 <AnswerCard key={ans.id} answer={ans} />
@@ -85,24 +89,12 @@ export default function QuestionDetailPage() {
             )}
           </Box>
 
-          {/* Form stays fixed at bottom */}
-          <Box>
+          {/* Form stays pinned at bottom */}
+          <Box sx={{ mt: 2 }}>
             <CreateAnswerForm questionId={question.id} />
           </Box>
         </Paper>
       </Box>
-
-      {/* Right Column - Answers */}
-      <Grid
-        item
-        xs={6}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "80vh",
-          mb: 6,
-        }}
-      ></Grid>
     </Container>
   );
 }

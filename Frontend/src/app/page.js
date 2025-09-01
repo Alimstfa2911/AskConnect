@@ -37,13 +37,12 @@ export default function HomePage() {
       sx={{
         width: "100%",
         minHeight: "100vh",
-        bgcolor: "#0b0f19",
         color: "white",
         px: 3,
         py: 6,
       }}
     >
-      <Box textAlign="center" mb={6}>
+      <Box textAlign="center" >
         <Typography variant="h3" fontWeight="bold" sx={{ mb: 2 }}>
           Empower your knowledge with{" "}
           <span style={{ color: "#38bdf8" }}>AskConnect</span>

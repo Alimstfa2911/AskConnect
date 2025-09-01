@@ -1,9 +1,9 @@
 type User {
-  id: ID!
+  id: ID
   name: String
   email: String
   avatar: String
-  role: String!
+  role: String
   questions: [Question]
   answers: [Answer]
 }
@@ -30,8 +30,8 @@ type Answer {
   author: User
   question: Question
   votes: [Vote]
-  createdAt: String!
-  updatedAt: String!
+  createdAt: String
+  updatedAt: String
 }
 
 type Vote {
