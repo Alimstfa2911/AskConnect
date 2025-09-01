@@ -11,10 +11,10 @@ export function NotificationProvider({ children }) {
   const [notifications, setNotifications] = useState([]);
 
   const { data } = useSubscription(NEW_NOTIFICATION, {
-    skip: !user?.id,
+    skip: !user?.id || user?.role !== "admin",
     variables: { userId: user?.id },
   });
-
+  console.log("Data in NotificationProvider", data);
   useEffect(() => {
     if (data?.newNotification) {
       setNotifications((prev) => [data.newNotification, ...prev]);

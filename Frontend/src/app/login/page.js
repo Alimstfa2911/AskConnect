@@ -14,6 +14,8 @@ import {
 import { useRouter } from "next/navigation";
 import { AuthContext } from "../context/AuthContext";
 import Template from "../pages/Template";
+import Login_Image from '../public/images/Login_Image.jpg';
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -114,7 +116,7 @@ export default function LoginPage() {
       title="Welcome Back"
       description1="Get back to your community"
       description2="Ask and Share with others"
-      // image={loginImg}
+      image={Login_Image}
       form={form}
     />
   );

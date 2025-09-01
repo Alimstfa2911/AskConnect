@@ -23,7 +23,6 @@ export function createApolloClient() {
       ? new GraphQLWsLink(
           createClient({
             url: "ws://localhost:4000/graphql",
-            // important: function form
             connectionParams: () => {
               const token = localStorage.getItem("token");
               return {

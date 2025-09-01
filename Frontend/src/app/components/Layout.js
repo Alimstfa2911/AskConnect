@@ -11,10 +11,9 @@ export default function Layout({ children }) {
       sx={{
         display: "flex",
         flexDirection: "column",
-        minHeight: "100vh", // full viewport height
+        minHeight: "100vh", 
       }}
     >
-      {/* Fixed Navbar */}
       <Box
         sx={{
           position: "fixed",
@@ -28,19 +27,17 @@ export default function Layout({ children }) {
         <Navbar />
       </Box>
 
-      {/* Main content */}
       <Box
         component="main"
         sx={{
-          flex: 1, // take remaining height
-          mt: "80px", // offset navbar height
+          flex: 1, 
+          mt: "80px", 
           px: 2,
         }}
       >
         <Container>{children}</Container>
       </Box>
 
-      {/* Footer */}
       <Box sx={{ mt: "auto" }}>
         <Footer />
       </Box>

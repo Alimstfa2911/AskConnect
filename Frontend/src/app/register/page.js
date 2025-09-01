@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { AuthContext } from "../context/AuthContext";
 import { REGISTER } from "../graphql/mutations";
 import Template from "../pages/Template";
-import Register_image from "@/app/public/images/Register_image.jpg";
+import Register_image from "../public/images/Register_image.jpg";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");

@@ -23,22 +23,22 @@ export default function Navbar() {
       position="fixed"
       elevation={0}
       sx={{
-        background: "rgba(15, 23, 42, 0.8)", // semi-transparent rich black
-        backdropFilter: "blur(12px)", // frosted glass effect
+        background: "rgba(15, 23, 42, 0.8)", 
+        backdropFilter: "blur(12px)",
         borderBottom: "1px solid rgba(255,255,255,0.1)",
         px: 3,
         zIndex: 1300,
       }}
     >
       <Toolbar sx={{ display: "flex", alignItems: "center" }}>
-        {/* Logo / Brand */}
+       
         <Typography
           variant="h6"
           sx={{
             flexGrow: 1,
             fontWeight: "bold",
             cursor: "pointer",
-            color: "#facc15", // yellow highlight
+            color: "#facc15", 
             "&:hover": { color: "#fde047" },
           }}
           onClick={() => router.push("/")}
@@ -46,7 +46,6 @@ export default function Navbar() {
           AskConnect
         </Typography>
 
-        {/* Links (right side) */}
         {!isLoggedIn ? (
           <Box sx={{ display: "flex", gap: 2 }}>
             <Button
@@ -54,7 +53,7 @@ export default function Navbar() {
               sx={{
                 color: "#e5e7eb",
                 textTransform: "none",
-                "&:hover": { color: "#38bdf8" }, // blue on hover
+                "&:hover": { color: "#38bdf8" },
               }}
             >
               Login
@@ -99,7 +98,7 @@ export default function Navbar() {
             <Button
               onClick={handleLogout}
               sx={{
-                color: "#f87171", // red for logout
+                color: "#f87171", 
                 textTransform: "none",
                 fontWeight: "bold",
                 "&:hover": { color: "#ef4444" },

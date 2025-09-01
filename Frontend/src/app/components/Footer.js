@@ -15,7 +15,6 @@ export default function Footer() {
       <Container maxWidth="lg">
         <Grid container spacing={6} justifyContent="space-between">
 
-          {/* Section 1 - Logo + Company */}
           <Grid item xs={12} md={3}>
 
             <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>Company</Typography>
@@ -30,7 +29,6 @@ export default function Footer() {
             </Box>
           </Grid>
 
-          {/* Section 2 - Resources + Support */}
           <Grid item xs={12} md={3}>
             <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>Resources</Typography>
             {Resources.map((item, idx) => (
@@ -40,7 +38,6 @@ export default function Footer() {
             <Typography variant="body2">Help Center</Typography>
           </Grid>
 
-          {/* Section 3 - Plans + Community */}
           <Grid item xs={12} md={3}>
             <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>Plans</Typography>
             {Plans.map((item, idx) => (
@@ -52,7 +49,6 @@ export default function Footer() {
             ))}
           </Grid>
 
-          {/* Section 4 - Footer Links + Socials */}
           <Grid item xs={12} md={3}>
             <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>Legal</Typography>
             {BottomFooter.map((item, idx) => (
@@ -67,7 +63,6 @@ export default function Footer() {
           </Grid>
         </Grid>
 
-        {/* Bottom Copyright */}
         <Box sx={{ mt: 3,mb: 2, borderTop: "1px solid #374151", pt: 3, textAlign: "center", width: "100%" }}>
           <Typography variant="body2">
             © {new Date().getFullYear()} AskConnect. All rights reserved.

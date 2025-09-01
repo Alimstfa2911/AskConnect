@@ -57,7 +57,7 @@ export default function ProfilePage() {
           Profile
         </Typography>
         <Avatar
-          src={profile?.avatar || "/profile.jpg"}
+          src={profile?.avatar || "../public/images/profile.jpg"}
           alt={profile?.name}
           sx={{ width: 100, height: 100, mx: "auto", mb: 2 }}
         />

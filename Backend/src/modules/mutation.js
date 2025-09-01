@@ -96,7 +96,7 @@ export const questionMutation = {
       $push: { questions: question._id },
     });
 
-    const admins = await User.find({ role: "admin" }); // assuming your User schema has a role field
+    const admins = await User.find({ role: "admin" }); 
 
     admins.forEach((admin) => {
       console.log("Admin id:", admin.id);

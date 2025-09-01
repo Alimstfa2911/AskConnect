@@ -17,7 +17,7 @@ export default function CreateQuestionForm() {
 
   const [createQuestion, { loading }] = useMutation(CREATE_QUESTION, {
     onCompleted: () => {
-      router.push("/"); // redirect after creation
+      router.push("/"); 
     },
     onError: (err) => {
       setErrorMsg(err.message);
@@ -25,7 +25,7 @@ export default function CreateQuestionForm() {
   });
 
   useEffect(() => {
-    setFadeIn(true); // trigger fade-in animation on mount
+    setFadeIn(true); 
   }, []);
 
   const handleSubmit = (e) => {

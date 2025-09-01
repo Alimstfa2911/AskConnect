@@ -35,7 +35,7 @@ export default function QuestionsTable() {
 
     try {
       await deleteQuestion({ variables: { id } });
-      refetch(); // refresh table after deletion
+      refetch(); 
     } catch (err) {
       console.error(err);
     }

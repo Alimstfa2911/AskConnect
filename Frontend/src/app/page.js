@@ -9,6 +9,7 @@ import SearchBar from "./components/SearchBar";
 import { useContext, useMemo } from "react";
 import { AuthContext } from "./context/AuthContext";
 import { useRouter } from "next/navigation";
+import QuestionsList from "./question/questionList/page";
 
 export default function HomePage() {
   const client = useMemo(() => createApolloClient(), []);
@@ -42,7 +43,7 @@ export default function HomePage() {
         py: 6,
       }}
     >
-      <Box textAlign="center" >
+      <Box textAlign="center">
         <Typography variant="h3" fontWeight="bold" sx={{ mb: 2 }}>
           Empower your knowledge with{" "}
           <span style={{ color: "#38bdf8" }}>AskConnect</span>
@@ -79,11 +80,7 @@ export default function HomePage() {
           Recent Discussions
         </Typography>
 
-        <Box display="flex" flexDirection="column" gap={2}>
-          {data?.questions.map((q) => (
-            <QuestionCard key={q.id} question={q} />
-          ))}
-        </Box>
+        <QuestionsList questions={data?.questions || []} />
       </Card>
     </Box>
   );

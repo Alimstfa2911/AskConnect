@@ -38,7 +38,7 @@ export default function CreateAnswerForm({ questionId }) {
             placeholder="Write your answer..."
             value={text}
             onChange={(e) => setText(e.target.value)}
-            disabled={!isLoggedIn} // disable if not logged in
+            disabled={!isLoggedIn}
             sx={{
               backgroundColor: "#1F2937",
               color: "#E5E7EB",
@@ -66,7 +66,7 @@ export default function CreateAnswerForm({ questionId }) {
               color: "#E5E7EB",
               "&:hover": { backgroundColor: "#2563EB" },
             }}
-            disabled={!isLoggedIn || loading} // disable if not logged in
+            disabled={!isLoggedIn || loading} 
           >
             {loading ? "Posting..." : "Post Answer"}
           </Button>
