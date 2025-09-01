@@ -11,7 +11,7 @@ import QuestionsTable from "../admin/dashboard/components/QuestionTable";
 export default function ProfilePage() {
   const { user, loadingUser } = useContext(AuthContext);
   console.log("LoadingUser :", loadingUser);
-  // Wait for user context to load
+
   const { loading, error, data } = useQuery(PROFILE, {
     skip: !user
   });

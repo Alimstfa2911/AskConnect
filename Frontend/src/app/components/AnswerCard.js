@@ -61,18 +61,23 @@ export default function AnswerCard({ answer }) {
 
     try {
       if (type === "upvote") await upvoteMutate({ variables: { answerId } });
-      if (type === "downvote")
-        await downvoteMutate({ variables: { answerId } });
+      if (type === "downvote") await downvoteMutate({ variables: { answerId } });
     } catch (err) {
       console.error("Vote mutation failed:", err);
     }
   };
 
   return (
-    <Card sx={{ mb: 2, p: 1 }}>
+    <Card sx={{ mb: 2, p: 1, backgroundColor: "#111827", color: "#E5E7EB" }}>
       <CardContent>
-        <Typography variant="body1">{answer.text}</Typography>
-        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+        <Typography variant="body1" sx={{ color: "#E5E7EB" }}>
+          {answer.text}
+        </Typography>
+        <Typography
+          variant="caption"
+          display="block"
+          sx={{ mt: 1, color: "#9CA3AF" }}
+        >
           Answered by: {answer.author?.name || "Anonymous"}
         </Typography>
 
@@ -81,27 +86,27 @@ export default function AnswerCard({ answer }) {
             <span>
               <IconButton
                 onClick={() => handleVote("upvote")}
-                color={userVote === 1 ? "primary" : "default"}
+                sx={{ color: userVote === 1 ? "#3B82F6" : "#E5E7EB" }}
                 disabled={!isLoggedIn}
               >
                 <ThumbUpIcon />
               </IconButton>
             </span>
           </Tooltip>
-          <Typography>{upvoteCount}</Typography>
+          <Typography sx={{ color: "#E5E7EB" }}>{upvoteCount}</Typography>
 
           <Tooltip title={isLoggedIn ? "" : "Login to vote"}>
             <span>
               <IconButton
                 onClick={() => handleVote("downvote")}
-                color={userVote === -1 ? "error" : "default"}
+                sx={{ color: userVote === -1 ? "#EF4444" : "#E5E7EB" }}
                 disabled={!isLoggedIn}
               >
                 <ThumbDownIcon />
               </IconButton>
             </span>
           </Tooltip>
-          <Typography>{downvoteCount}</Typography>
+          <Typography sx={{ color: "#E5E7EB" }}>{downvoteCount}</Typography>
         </Box>
       </CardContent>
     </Card>

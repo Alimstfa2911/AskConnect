@@ -25,7 +25,6 @@ export default function QuestionCard({ question, hideViewButton = false }) {
 
   const upvoteCount = question.votes?.filter((v) => v.value === 1).length || 0;
   const downvoteCount = question.votes?.filter((v) => v.value === -1).length || 0;
-
   const userVote = question.votes?.find((v) => v.user?.id === user?.id)?.value;
 
   const [upvote] = useMutation(UPVOTE_QUESTION, {
@@ -37,21 +36,25 @@ export default function QuestionCard({ question, hideViewButton = false }) {
   });
 
   const handleVote = async (type) => {
-    if (!isLoggedIn) return; 
+    if (!isLoggedIn) return;
 
     if (type === "upvote") {
       await upvote({ variables: { questionId: question.id } });
     } else if (type === "downvote") {
-      await downvote({ variables: {  questionId: question.id } });
+      await downvote({ variables: { questionId: question.id } });
     }
   };
 
   return (
-    <Card sx={{ mb: 2, p: 1 }}>
+    <Card sx={{ mb: 2, p: 1, backgroundColor: "#111827", color: "#E5E7EB" }}>
       <CardContent>
-        <Typography variant="h6">{question.title}</Typography>
-        <Typography variant="body2" color="text.secondary">{question.description}</Typography>
-        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+        <Typography variant="h6" sx={{ color: "#E5E7EB" }}>
+          {question.title}
+        </Typography>
+        <Typography variant="body2" sx={{ color: "#D1D5DB" }}>
+          {question.description}
+        </Typography>
+        <Typography variant="caption" display="block" sx={{ mt: 1, color: "#9CA3AF" }}>
           Asked by: {question.author?.name || "Anonymous"}
         </Typography>
 
@@ -59,7 +62,7 @@ export default function QuestionCard({ question, hideViewButton = false }) {
           <Tooltip title={isLoggedIn ? "" : "Login to vote"}>
             <span>
               <IconButton
-                color={userVote === 1 ? "primary" : "default"}
+                sx={{ color: userVote === 1 ? "#3B82F6" : "#E5E7EB" }}
                 onClick={() => handleVote("upvote")}
                 disabled={!isLoggedIn}
               >
@@ -67,12 +70,12 @@ export default function QuestionCard({ question, hideViewButton = false }) {
               </IconButton>
             </span>
           </Tooltip>
-          <Typography>{upvoteCount}</Typography>
+          <Typography sx={{ color: "#E5E7EB" }}>{upvoteCount}</Typography>
 
           <Tooltip title={isLoggedIn ? "" : "Login to vote"}>
             <span>
               <IconButton
-                color={userVote === -1 ? "error" : "default"}
+                sx={{ color: userVote === -1 ? "#EF4444" : "#E5E7EB" }}
                 onClick={() => handleVote("downvote")}
                 disabled={!isLoggedIn}
               >
@@ -80,13 +83,17 @@ export default function QuestionCard({ question, hideViewButton = false }) {
               </IconButton>
             </span>
           </Tooltip>
-          <Typography>{downvoteCount}</Typography>
+          <Typography sx={{ color: "#E5E7EB" }}>{downvoteCount}</Typography>
         </Box>
       </CardContent>
 
       {!hideViewButton && (
         <CardActions>
-          <Button size="small" onClick={() => router.push(`/question/${question.id}`)}>
+          <Button
+            size="small"
+            sx={{ color: "#3B82F6" }}
+            onClick={() => router.push(`/question/${question.id}`)}
+          >
             View
           </Button>
         </CardActions>

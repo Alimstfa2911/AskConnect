@@ -29,7 +29,6 @@ export default function UserTable() {
   const [roleLoading, setRoleLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  // Snackbar state
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
@@ -44,7 +43,6 @@ export default function UserTable() {
 
   const users = data.getAllUsers;
 
-  // Handle Delete
   const handleDeleteClick = (user) => {
     setSelectedUser(user);
     setOpenDialog(true);
@@ -74,7 +72,6 @@ export default function UserTable() {
     setSelectedUser(null);
   };
 
-  // Handle Role Change
   const handleChangeRole = async (id, role) => {
     try {
       setRoleLoading(true);
@@ -141,7 +138,6 @@ export default function UserTable() {
         />
       </div>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={openDialog} onClose={handleCancelDelete}>
         <DialogTitle>Delete User</DialogTitle>
         <DialogContent>
@@ -160,7 +156,6 @@ export default function UserTable() {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar for Success & Errors */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}

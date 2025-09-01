@@ -18,7 +18,8 @@ export const userQuery = {
   },
 
   profile: async (_, __, context) => {
-    console.log("Profile in mutation");
+    console.log("Profile in query");
+    console.log("Context in query profile :", context);
     authCheck(context);
     console.log("After authChcek");
     return User.findById(context.user.id)

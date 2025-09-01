@@ -57,6 +57,8 @@ export default function CreateQuestionForm() {
           p: 4,
           boxShadow: 4,
           borderRadius: 3,
+          backgroundColor: "#111827",
+          color: "#E5E7EB",
           opacity: fadeIn ? 1 : 0,
           transform: fadeIn ? "translateY(0)" : "translateY(20px)",
           transition: "all 0.5s ease-in-out",
@@ -72,6 +74,13 @@ export default function CreateQuestionForm() {
             margin="normal"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            sx={{
+              backgroundColor: "#1F2937",
+              "& .MuiInputBase-input": { color: "#E5E7EB" },
+              "& .MuiOutlinedInput-notchedOutline": { borderColor: "#374151" },
+              "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#3B82F6" },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#3B82F6" },
+            }}
           />
           <TextField
             fullWidth
@@ -81,10 +90,17 @@ export default function CreateQuestionForm() {
             margin="normal"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            sx={{
+              backgroundColor: "#1F2937",
+              "& .MuiInputBase-input": { color: "#E5E7EB" },
+              "& .MuiOutlinedInput-notchedOutline": { borderColor: "#374151" },
+              "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#3B82F6" },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#3B82F6" },
+            }}
           />
 
           {errorMsg && (
-            <Alert severity="error" sx={{ mt: 2 }}>
+            <Alert severity="error" sx={{ mt: 2, backgroundColor: "#B91C1C", color: "#FEE2E2" }}>
               {errorMsg}
             </Alert>
           )}
@@ -97,8 +113,10 @@ export default function CreateQuestionForm() {
             sx={{
               mt: 3,
               py: 1.2,
+              backgroundColor: "#3B82F6",
+              color: "#E5E7EB",
+              "&:hover": { backgroundColor: "#2563EB", transform: "scale(1.02)" },
               transition: "0.3s",
-              "&:hover": { backgroundColor: "primary.dark", transform: "scale(1.02)" },
             }}
           >
             {loading ? "Creating..." : "Share..."}

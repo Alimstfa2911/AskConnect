@@ -4,7 +4,6 @@ import { expressMiddleware } from "@as-integrations/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import cors from "cors";
 import http from "http";
-import bodyParser from "body-parser";
 import { typeDefs } from "./src/schema/typeDefs.js";
 import { resolvers } from "./src/schema/resolvers.js";
 import { mongoDB } from "./config/DbConfig.js";
@@ -14,16 +13,7 @@ import { useServer } from "graphql-ws/use/ws";
 import { pubsub } from "./src/schema/pubsub.js";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 
-// 1. Connect to MongoDB
 mongoDB();
-
-// 2. Define a Mongoose Schema + Model
-
-// 3. Define GraphQL Type Definitions
-
-// 4. Define Resolvers → interact with DB
-
-// 5. Create Apollo Server
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -36,7 +26,6 @@ const server = new ApolloServer({
 });
 await server.start();
 
-// 🔑 IMPORTANT: json middleware must come BEFORE expressMiddleware
 
 app.use(
   "/graphql",
@@ -49,6 +38,7 @@ app.use(
 
       if (authHeader.startsWith("Bearer ")) {
         const token = authHeader.split(" ")[1];
+        console.log("Token in server context", token);
         if (token) {
           try {
             user = jwt.verify(token, "SECRET_KEY");

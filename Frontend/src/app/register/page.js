@@ -2,10 +2,11 @@
 
 import { useState, useContext } from "react";
 import { useMutation } from "@apollo/client/react";
-import { Box, Button, TextField, Card, Typography, Alert, Link as MuiLink } from "@mui/material";
+import { Box, Button, TextField, Alert, Typography, Link as MuiLink } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "../context/AuthContext";
 import { REGISTER } from "../graphql/mutations";
+import Template from "../pages/Template";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -65,100 +66,75 @@ export default function RegisterPage() {
     });
   };
 
-  return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "80vh",
-        px: 2,
-      }}
-    >
-      <Card sx={{ width: "100%", maxWidth: 400, p: 4, boxShadow: 4, borderRadius: 3 }}>
-        <Typography variant="h5" fontWeight="bold" align="center" gutterBottom>
-          Create Account
+  const form = (
+    <Box component="form" onSubmit={handleSubmit}>
+      <TextField
+        fullWidth
+        label="Username"
+        margin="normal"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <TextField
+        fullWidth
+        label="Email"
+        margin="normal"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <TextField
+        fullWidth
+        label="Password"
+        type="password"
+        margin="normal"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => setFile(e.target.files[0])}
+        style={{ marginTop: "15px", marginBottom: "15px", display: "block" }}
+      />
+
+      {errorMsg && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {errorMsg}
+        </Alert>
+      )}
+
+      <Button
+        type="submit"
+        variant="contained"
+        fullWidth
+        disabled={loading}
+        sx={{ py: 1.2, mt: 2 }}
+      >
+        {loading ? "Registering..." : "Register"}
+      </Button>
+
+      <Box sx={{ mt: 3, textAlign: "center" }}>
+        <Typography variant="body2" color="text.secondary">
+          Already have an account?{" "}
+          <MuiLink
+            component="button"
+            onClick={() => router.push("/login")}
+            sx={{ fontWeight: "bold", cursor: "pointer" }}
+          >
+            Login
+          </MuiLink>
         </Typography>
-        <Typography variant="body2" color="text.secondary" align="center" mb={2}>
-          Sign up to get started
-        </Typography>
-
-        <TextField
-          fullWidth
-          label="Username"
-          margin="normal"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <TextField
-          fullWidth
-          label="Email"
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          fullWidth
-          label="Password"
-          type="password"
-          margin="normal"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setFile(e.target.files[0])}
-          style={{
-            marginTop: "15px",
-            marginBottom: "15px",
-            display: "block",
-          }}
-        />
-
-        {errorMsg && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {errorMsg}
-          </Alert>
-        )}
-
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          disabled={loading}
-          sx={{
-            py: 1.2,
-            transition: "0.3s",
-            "&:hover": { backgroundColor: "primary.dark" },
-          }}
-        >
-          {loading ? "Registering..." : "Register"}
-        </Button>
-
-        {/* Already have account link */}
-        <Box sx={{ mt: 3, textAlign: "center" }}>
-          <Typography variant="body2" color="text.secondary">
-            Already have an account?{" "}
-            <MuiLink
-              component="button"
-              onClick={() => router.push("/login")}
-              sx={{
-                fontWeight: "bold",
-                textDecoration: "none",
-                cursor: "pointer",
-                transition: "0.3s",
-                "&:hover": { color: "primary.main" },
-              }}
-            >
-              Login
-            </MuiLink>
-          </Typography>
-        </Box>
-      </Card>
+      </Box>
     </Box>
+  );
+
+  return (
+    <Template
+      title="Join with millions brilliant mind on AskConnect"
+      description2="Ask, Share and grow"
+      // image={Register_image}
+      form={form}
+    />
   );
 }

@@ -4,66 +4,112 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "../context/AuthContext";
 import NotificationBell from "../notification/page";
+
 export default function Navbar() {
   const router = useRouter();
   const { isLoggedIn, user, logout } = useContext(AuthContext);
-  console.log("User id in navBar:", user?.id);
+
   const handleLogout = () => {
     logout();
     router.push("/");
   };
+
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: "#1864ab", zIndex: 1300 }}>
-      {" "}
-      <Toolbar sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-        {" "}
+    <AppBar
+      position="fixed"
+      elevation={0}
+      sx={{
+        background: "rgba(15, 23, 42, 0.8)", // semi-transparent rich black
+        backdropFilter: "blur(12px)", // frosted glass effect
+        borderBottom: "1px solid rgba(255,255,255,0.1)",
+        px: 3,
+        zIndex: 1300,
+      }}
+    >
+      <Toolbar sx={{ display: "flex", alignItems: "center" }}>
+        {/* Logo / Brand */}
         <Typography
           variant="h6"
-          sx={{ flexGrow: 1, cursor: "pointer" }}
+          sx={{
+            flexGrow: 1,
+            fontWeight: "bold",
+            cursor: "pointer",
+            color: "#facc15", // yellow highlight
+            "&:hover": { color: "#fde047" },
+          }}
           onClick={() => router.push("/")}
         >
-          {" "}
-          AskConnect{" "}
-        </Typography>{" "}
+          AskConnect
+        </Typography>
+
+        {/* Links (right side) */}
         {!isLoggedIn ? (
-          <>
-            {" "}
-            <Button color="inherit" onClick={() => router.push("/login")}>
-              {" "}
-              Login{" "}
-            </Button>{" "}
-            <Button color="inherit" onClick={() => router.push("/register")}>
-              {" "}
-              Register{" "}
-            </Button>{" "}
-          </>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Button
+              onClick={() => router.push("/login")}
+              sx={{
+                color: "#e5e7eb",
+                textTransform: "none",
+                "&:hover": { color: "#38bdf8" }, // blue on hover
+              }}
+            >
+              Login
+            </Button>
+            <Button
+              onClick={() => router.push("/register")}
+              sx={{
+                color: "#e5e7eb",
+                textTransform: "none",
+                "&:hover": { color: "#38bdf8" },
+              }}
+            >
+              Register
+            </Button>
+          </Box>
         ) : (
-          <>
-            {" "}
-            {user && <NotificationBell userId={user.id} />}{" "}
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            {user && <NotificationBell userId={user.id} />}
             {user?.role === "admin" && (
               <Button
-                color="inherit"
                 onClick={() => router.push("/admin/dashboard")}
+                sx={{
+                  color: "#38bdf8",
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  "&:hover": { color: "#7dd3fc" },
+                }}
               >
-                {" "}
-                Admin Dashboard{" "}
+                Admin Dashboard
               </Button>
-            )}{" "}
-            <Button color="inherit" onClick={() => router.push("/profile")}>
-              {" "}
-              Profile{" "}
-            </Button>{" "}
-            <Button color="inherit" onClick={handleLogout}>
-              {" "}
-              Logout{" "}
-            </Button>{" "}
-          </>
-        )}{" "}
-      </Toolbar>{" "}
+            )}
+            <Button
+              onClick={() => router.push("/profile")}
+              sx={{
+                color: "#e5e7eb",
+                textTransform: "none",
+                "&:hover": { color: "#38bdf8" },
+              }}
+            >
+              Profile
+            </Button>
+            <Button
+              onClick={handleLogout}
+              sx={{
+                color: "#f87171", // red for logout
+                textTransform: "none",
+                fontWeight: "bold",
+                "&:hover": { color: "#ef4444" },
+              }}
+            >
+              Logout
+            </Button>
+          </Box>
+        )}
+      </Toolbar>
     </AppBar>
   );
 }
