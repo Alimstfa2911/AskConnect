@@ -70,6 +70,12 @@ export const GET_QUESTION_BY_ID = gql`
           id
           name
         }
+        votes {
+          user {
+            id
+          }
+          value
+        }
         question {
           id
         }

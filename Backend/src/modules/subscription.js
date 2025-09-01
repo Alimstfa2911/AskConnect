@@ -1,30 +1,26 @@
-import { PubSub } from "graphql-subscriptions";
-const pubsub = new PubSub();
+import { Notification } from "../models/notification.js";
+
 
 export const notificationResolvers = {
-  Subscription: {
-    notificationAdded: {
-      subscribe: (_, { userId }) => {
-        console.log("Subscribing to notifications for userId:", userId);
-        const iterator = pubsub.asyncIterator(`NOTIFICATION_${userId}`);
-        console.log("AsyncIterator created:", iterator);
-        return iterator;
-      },
+  Query: {
+    getNotifications: async (_, { userId }) => {
+      return Notification.find({ user: userId }).sort({ createdAt: -1 });
     },
   },
   Mutation: {
-    createNotification: async (_, { userId, message }) => {
-      const notification = {
-        id: new Date().getTime().toString(),
-        userId,
-        message,
-        createdAt: new Date().toISOString(),
-      };
-      console.log("Notification created", notification);
-      pubsub.publish(`NOTIFICATION_${userId}`, {
-        notificationAdded: notification,
-      });
+    markNotificationRead: async (_, { id }) => {
+      return notification.findByIdAndUpdate(id, { read: true }, { new: true });
+    },
+    createNotification: async (_, { userId, message }, { pubsub }) => {
+      const notification = await Notification.create({ user: userId, message });
+      pubsub.publish("NEW_NOTIFICATION", { newNotification: notification });
       return notification;
+    },
+  },
+  Subscription: {
+    newNotification: {
+      subscribe: (_, { userId }, { pubsub }) =>
+        pubsub.asyncIterableIterator(["NEW_NOTIFICATION"]),
     },
   },
 };

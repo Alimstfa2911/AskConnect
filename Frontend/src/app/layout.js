@@ -3,7 +3,6 @@ import * as React from "react";
 import { ApolloProvider } from "@apollo/client/react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import client from "./lib/apolloClient";
 import Layout from "./components/Layout";
 import AuthProvider from "./context/AuthContext";
 import ApolloWrapper from "./provider/ApolloProvider";
@@ -89,12 +88,10 @@ export default function RootLayout({ children }) {
         <ApolloWrapper>
           <AuthProvider>
             <NotificationProvider>
-              <ApolloProvider client={client}>
-                <ThemeProvider theme={theme}>
-                  <CssBaseline />
-                  <Layout>{children}</Layout>
-                </ThemeProvider>
-              </ApolloProvider>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Layout>{children}</Layout>
+              </ThemeProvider>
             </NotificationProvider>
           </AuthProvider>
         </ApolloWrapper>

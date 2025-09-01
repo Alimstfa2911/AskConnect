@@ -1,14 +1,18 @@
 "use client";
 import { createContext, useState, useEffect } from "react";
+import { createApolloClient } from "../lib/apolloClient";
 export const AuthContext = createContext();
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loadingUser, setLoadingUser] = useState(true);
+  const [client, setClient] = useState(createApolloClient());
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
     console.log("User in context:", userData);
+
     if (token && userData && userData !== "undefined") {
       console.log("Token :", token);
       try {
@@ -34,6 +38,7 @@ export default function AuthProvider({ children }) {
     localStorage.setItem("user", JSON.stringify(user));
     setIsLoggedIn(true);
     setUser(user);
+    setClient(createApolloClient());
   };
 
   const logout = () => {
@@ -41,11 +46,12 @@ export default function AuthProvider({ children }) {
     localStorage.removeItem("user");
     setIsLoggedIn(false);
     setUser(null);
+    setClient(createApolloClient());
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoggedIn, setIsLoggedIn, login, logout, loadingUser }}
+      value={{ user, isLoggedIn, setIsLoggedIn, login, logout, loadingUser, client }}
     >
       {" "}
       {children}{" "}

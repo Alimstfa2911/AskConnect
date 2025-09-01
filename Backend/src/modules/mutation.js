@@ -8,6 +8,7 @@ import { Question } from "../models/questionSchema.js";
 import { Answer } from "../models/answerSchema.js";
 import { transporter } from "../utils/mailer.js";
 import dotenv from "dotenv";
+import { Notification } from "../models/notification.js";
 
 dotenv.config();
 
@@ -208,20 +209,18 @@ export const answerMutation = {
 
     const admins = await User.find({ role: "admin" });
 
-    admins.forEach((admin) => {
-      console.log("Admin id in addAnswer:", typeof admin.id);
-      pubsub.publish(`NOTIFICATION_${admin.id}`, {
-        notificationAdded: {
-          id: new Date().getTime().toString(),
-          userId: admin.id,
-          message: `${context.user.name} added a new answer to "${question.title}"`,
-          createdAt: new Date().toISOString(),
-        },
+     for (const admin of admins) {
+      const notification = await Notification.create({
+        user: admin._id,
+        message: `${context.user.name} answered a question`,
       });
-    });
+
+      // Publish via subscription
+      pubsub.publish("NEW_NOTIFICATION", { newNotification: notification });
+    }
 
     console.log("All notifications published for admins");
-    
+
     return await answer.populate([
       "author",
       "question",

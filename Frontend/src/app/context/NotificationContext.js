@@ -2,8 +2,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { AuthContext } from "./AuthContext";
 import { useSubscription } from "@apollo/client/react";
-import { NOTIFICATION_SUBSCRIPTION } from "../graphql/subscription";
-
+import { NEW_NOTIFICATION } from "../graphql/subscription.js";
 
 const NotificationContext = createContext();
 
@@ -11,14 +10,16 @@ export function NotificationProvider({ children }) {
   const { user } = useContext(AuthContext);
   const [notifications, setNotifications] = useState([]);
 
-  const { data } = useSubscription(NOTIFICATION_SUBSCRIPTION, {
-    variables: { userId: user?.id },
+  const { data } = useSubscription(NEW_NOTIFICATION, {
     skip: !user?.id,
+    variables: { userId: user?.id },
   });
 
   useEffect(() => {
-    if (data?.notificationAdded) {
-      setNotifications((prev) => [data.notificationAdded, ...prev]);
+    if (data?.newNotification) {
+      setNotifications((prev) => [data.newNotification, ...prev]);
+
+      console.log("New notification :", notifications);
     }
   }, [data]);
 

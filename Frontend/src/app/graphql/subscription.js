@@ -1,11 +1,12 @@
 import { gql } from "@apollo/client";
 
-export const NOTIFICATION_SUBSCRIPTION = gql`
-  subscription OnNotification($userId: ID!) {
-    notificationAdded(userId: $userId) {
+export const NEW_NOTIFICATION = gql`
+  subscription NewNotification($userId: ID!) {
+    newNotification(userId: $userId) {
       id
       message
       createdAt
     }
   }
 `;
+

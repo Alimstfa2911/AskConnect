@@ -1,16 +1,17 @@
 "use client";
 
 import { Box, Button, Card, CircularProgress, Typography } from "@mui/material";
-import client from "./lib/apolloClient";
+import { createApolloClient } from "./lib/apolloClient";
 import { useQuery } from "@apollo/client/react";
 import { GET_ALL_QUESTIONS } from "./graphql/queries";
 import QuestionCard from "./components/QuestionCard";
 import SearchBar from "./components/SearchBar";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { AuthContext } from "./context/AuthContext";
 import { useRouter } from "next/navigation";
 
 export default function HomePage() {
+  const client = useMemo(() => createApolloClient(), []);
   const { _, error, data } = useQuery(GET_ALL_QUESTIONS, { client });
   const router = useRouter();
   const { user } = useContext(AuthContext);

@@ -1,3 +1,4 @@
+import { Query } from "mongoose";
 import {
   answerMutation,
   answerVoteMutation,
@@ -72,6 +73,9 @@ export const adminMutationModule = {
 };
 
 export const notificationModule = {
+  Query: {
+    ...notificationResolvers.Query,
+  },
   Mutation: {
     ...notificationResolvers.Mutation,
   },
