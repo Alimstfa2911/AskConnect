@@ -71,8 +71,10 @@ export default function Navbar() {
           </Box>
         ) : (
           <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-            {user && <NotificationBell userId={user.id} />}
-            {user?.role === "admin" && (
+            {
+            user?.role === "admin"  &&
+             <NotificationBell userId={user.id} />}
+            {/* {user?.role === "admin" && (
               <Button
                 onClick={() => router.push("/admin/dashboard")}
                 sx={{
@@ -84,7 +86,7 @@ export default function Navbar() {
               >
                 Admin Dashboard
               </Button>
-            )}
+            )} */}
             <Button
               onClick={() => router.push("/profile")}
               sx={{

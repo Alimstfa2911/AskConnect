@@ -14,12 +14,10 @@ export function NotificationProvider({ children }) {
     skip: !user?.id || user?.role !== "admin",
     variables: { userId: user?.id },
   });
-  console.log("Data in NotificationProvider", data);
+
   useEffect(() => {
     if (data?.newNotification) {
       setNotifications((prev) => [data.newNotification, ...prev]);
-
-      console.log("New notification :", notifications);
     }
   }, [data]);
 

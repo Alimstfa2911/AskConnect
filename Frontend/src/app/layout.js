@@ -12,15 +12,15 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#3B82F6", 
+      main: "#3B82F6",
       contrastText: "#E5E7EB",
     },
     secondary: {
       main: "#2563EB",
     },
     background: {
-      default: "#111827", 
-      paper: "#1F2937", 
+      default: "#111827",
+      paper: "#1F2937",
     },
     text: {
       primary: "#E5E7EB",
@@ -85,16 +85,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <ApolloWrapper>
-          <AuthProvider>
+        <AuthProvider>
+          <ApolloWrapper>
             <NotificationProvider>
               <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <Layout>{children}</Layout>
               </ThemeProvider>
             </NotificationProvider>
-          </AuthProvider>
-        </ApolloWrapper>
+          </ApolloWrapper>
+        </AuthProvider>
       </body>
     </html>
   );

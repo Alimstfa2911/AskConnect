@@ -2,10 +2,11 @@
 import { Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, Paper, CircularProgress } from "@mui/material";
 import { useQuery } from "@apollo/client/react";
 import { GET_ALL_USERS } from "../../graphql/queries";
-import AdminRoute from "../../components/AdminRoute";
+import AdminRoute from "@/app/hoc/adminRoute";
 
 export default function AdminDashboard() {
   const { loading, error, data } = useQuery(GET_ALL_USERS);
+  console.log(data);
 
   if (loading) return <CircularProgress sx={{ mt: 5 }} />;
   if (error) return <Typography color="error">{error.message}</Typography>;
@@ -33,8 +34,8 @@ export default function AdminDashboard() {
                   <TableCell>{u.name}</TableCell>
                   <TableCell>{u.email}</TableCell>
                   <TableCell>{u.role}</TableCell>
-                  <TableCell>{u.questions.length}</TableCell>
-                  <TableCell>{u.answers.length}</TableCell>
+                  <TableCell>{u.questions?.length}</TableCell>
+                  <TableCell>{u.answers?.length}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

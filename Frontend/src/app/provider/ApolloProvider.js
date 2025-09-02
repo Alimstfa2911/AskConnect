@@ -1,21 +1,12 @@
-// app/providers/ApolloProvider.tsx
-// "use client";
-
-// import { ApolloProvider } from "@apollo/client/react";
-// import client from "../lib/apolloClient";
-
-// export default function ApolloWrapper({ children }) {
-//   return <ApolloProvider client={client}>{children}</ApolloProvider>;
-// }
-
-// src/provider/ApolloWrapper.js
 "use client";
 
 import { ApolloProvider } from "@apollo/client/react";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { createApolloClient } from "../lib/apolloClient";
+import { AuthContext } from "../context/AuthContext";
 
 export default function ApolloWrapper({ children }) {
-  const client = useMemo(() => createApolloClient(), []);
+  const {isLoggedIn}=useContext(AuthContext);
+  const client = useMemo(() => createApolloClient(), [isLoggedIn]);
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 }

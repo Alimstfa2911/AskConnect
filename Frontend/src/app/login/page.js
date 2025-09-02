@@ -30,11 +30,9 @@ export default function LoginPage() {
       const user = data?.loginUser?.user;
       console.log("Token :", token);
       console.log("User :", user);
-
       if (token && user) {
         contextLogin(token, user);
-        if (user.role === "admin") router.push("/admin/dashboard");
-        else router.push("/profile");
+         router.push("/profile");
       } else {
         setErrorMsg("Login failed");
       }

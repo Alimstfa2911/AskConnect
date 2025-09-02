@@ -10,6 +10,7 @@ export function createApolloClient() {
 
   const authLink = setContext((_, { headers }) => {
     const token = localStorage.getItem("token");
+    console.log("Token in apollo client", token);
     return {
       headers: {
         ...headers,
@@ -26,7 +27,7 @@ export function createApolloClient() {
             connectionParams: () => {
               const token = localStorage.getItem("token");
               return {
-                authorization: token ? `Bearer ${token}` : "",
+                authorization: token ? `Bearer ${token}` : "No token",
               };
             },
           })
@@ -38,7 +39,10 @@ export function createApolloClient() {
       ? split(
           ({ query }) => {
             const def = getMainDefinition(query);
-            return def.kind === "OperationDefinition" && def.operation === "subscription";
+            return (
+              def.kind === "OperationDefinition" &&
+              def.operation === "subscription"
+            );
           },
           wsLink,
           authLink.concat(httpLink)

@@ -11,7 +11,6 @@ export default function AuthProvider({ children }) {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
-    console.log("User in context:", userData);
 
     if (token && userData && userData !== "undefined") {
       console.log("Token :", token);
@@ -26,19 +25,17 @@ export default function AuthProvider({ children }) {
         setUser(null);
       }
     } else {
-      
       setIsLoggedIn(false);
       setUser(null);
     }
     setLoadingUser(false);
-  }, []);
+  }, [isLoggedIn]);
 
   const login = (token, user) => {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
     setIsLoggedIn(true);
     setUser(user);
-    setClient(createApolloClient());
   };
 
   const logout = () => {
@@ -46,12 +43,19 @@ export default function AuthProvider({ children }) {
     localStorage.removeItem("user");
     setIsLoggedIn(false);
     setUser(null);
-    setClient(createApolloClient());
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoggedIn, setIsLoggedIn, login, logout, loadingUser, client }}
+      value={{
+        user,
+        isLoggedIn,
+        setIsLoggedIn,
+        login,
+        logout,
+        loadingUser,
+        client,
+      }}
     >
       {" "}
       {children}{" "}

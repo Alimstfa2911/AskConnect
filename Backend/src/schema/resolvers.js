@@ -19,6 +19,7 @@ export const resolvers = {
     ...userQueryModule.Query,
     ...questionQueryModule.Query,
     ...answerQueryModule.Query,
+    ...notificationModule.Query
   },
 
   Mutation: {

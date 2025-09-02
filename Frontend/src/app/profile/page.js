@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Typography, Card, Avatar } from "@mui/material";
 import { PROFILE } from "../graphql/queries";
 import { useQuery } from "@apollo/client/react";
@@ -9,13 +9,15 @@ import UserTable from "../admin/dashboard/components/UserTable";
 import QuestionsTable from "../admin/dashboard/components/QuestionTable";
 
 export default function ProfilePage() {
-  const { user, loadingUser } = useContext(AuthContext);
-  console.log("LoadingUser :", loadingUser);
+  const { user, loadingUser, isLoggedIn } = useContext(AuthContext);
+  const [profile, setProfile] = useState({});
 
-  const { loading, error, data } = useQuery(PROFILE, {
-    skip: !user
-  });
-  console.log("Data in profile :", data);
+  const { loading, error, data } = useQuery(PROFILE);
+
+  useEffect(() => {
+    if (loading) return;
+    setProfile(data?.profile);
+  }, [loading]);
 
   if (loadingUser || loading)
     return (
@@ -31,7 +33,7 @@ export default function ProfilePage() {
       </Box>
     );
 
-  const profile = data?.profile;
+  console.log("Profile in profile :", profile);
 
   return (
     <Box
@@ -77,26 +79,30 @@ export default function ProfilePage() {
           <Typography variant="h6" gutterBottom>
             📝 Questions Asked
           </Typography>
-          {profile?.questions?.length > 0
-            ? profile?.questions.map((q) => (
-                <Typography key={q.id} sx={{ mb: 1 }}>
-                  📝 {q.title}
-                </Typography>
-              ))
-            : <Typography>No questions asked yet</Typography>}
+          {profile?.questions?.length > 0 ? (
+            profile?.questions.map((q) => (
+              <Typography key={q.id} sx={{ mb: 1 }}>
+                📝 {q.title}
+              </Typography>
+            ))
+          ) : (
+            <Typography>No questions asked yet</Typography>
+          )}
         </Card>
 
         <Card sx={{ p: 2, boxShadow: 3, borderRadius: 3 }}>
           <Typography variant="h6" gutterBottom>
             💬 Answers Given
           </Typography>
-          {profile?.answers?.length > 0
-            ? profile.answers.map((a) => (
-                <Typography key={a.id} sx={{ mb: 1 }}>
-                  💬 {a.text} (on: {a.question.title})
-                </Typography>
-              ))
-            : <Typography>No answers given yet</Typography>}
+          {profile?.answers?.length > 0 ? (
+            profile.answers.map((a) => (
+              <Typography key={a.id} sx={{ mb: 1 }}>
+                💬 {a.text} (on: {a.question.title})
+              </Typography>
+            ))
+          ) : (
+            <Typography>No answers given yet</Typography>
+          )}
         </Card>
 
         {profile?.role === "admin" && (

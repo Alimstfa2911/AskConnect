@@ -38,7 +38,7 @@ export const userMutation = {
 
     if (!user) throw new Error("No user exists");
 
-    const valid = await bcrypt.compare(password, user.password);
+    const valid = bcrypt.compare(password, user.password);
 
     if (!valid) throw new Error("Incorrect password");
 
@@ -215,7 +215,6 @@ export const answerMutation = {
         message: `${context.user.name} answered a question`,
       });
 
-      // Publish via subscription
       pubsub.publish("NEW_NOTIFICATION", { newNotification: notification });
     }
 

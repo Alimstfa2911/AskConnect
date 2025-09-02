@@ -38,10 +38,11 @@ app.use(
 
       if (authHeader.startsWith("Bearer ")) {
         const token = authHeader.split(" ")[1];
-        console.log("Token in server context", token);
+
         if (token) {
           try {
             user = jwt.verify(token, "SECRET_KEY");
+            console.log("Jwt verified User :", user);
           } catch (err) {
             console.error("JWT Error:", err.message);
           }
