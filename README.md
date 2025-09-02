@@ -100,5 +100,5 @@ Tagging & categorization of questions.
 
 Push/email notifications for users on activity in their questions.
 
-Contribution
+## Contribution
 Contributions are welcome! Please fork the repo and create a pull request.
