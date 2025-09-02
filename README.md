@@ -1,18 +1,104 @@
-# AskConnect
+## AskConnect
+AskConnect is a community-based FAQ forum where users can share questions, engage in discussions, and provide answers with an interactive voting system. It is built with React, Next.js, Material-UI, GraphQL, Node.js, MongoDB, JWT, and bcrypt, etc.. offering secure authentication, role-based authorization, real-time notifications, and an admin dashboard for complete oversight.
 
-AskConnect is an interactive community forum where users can ask questions, answer them, and interact through likes, dislikes, and notifications. Admins can monitor activity and receive notifications when users perform certain actions. Built using the MERN stack with GraphQL for efficient data fetching.
+### Core Features
+#### User Features
+Authentication & Authorization:
 
-## Core Features
+Secure login & registration with JWT-based authentication.
 
-User Authentication: Secure login and registration functionality with role-based access.
+Role-based authorization using AuthContext.
 
-Role-based Functionality: Differentiated experience for users and admins.
+#### Profile Dashboard:
+View personal details, created questions, and answers.
 
-Question & Answer Management: Users can ask and answer questions, while admins can track user activity.
+##### Questions & Answers:
+Post questions and answer others’ queries.
 
-Real-Time Notifications: Admins are notified whenever users add answers or perform significant actions.
+Like/Dislike questions and answers.
 
-Interactive Dashboard: Admins can monitor activity, while users have a personalized experience.
+Search questions with results shown on the homepage.
 
-Pagination & Search: Questions can be browsed efficiently, with search and pagination for better usability.
+##### Password Reset:
+Forgot password recovery via Nodemailer.
 
+#### Admin Features
+##### Admin Dashboard:
+Access profile details and manage users.
+
+##### User Management:
+View all users, change roles, and delete accounts.
+
+##### Question Management:
+View all questions with actions to delete or review them.
+
+##### Live Notifications:
+Receive real-time updates when users create questions or post answers via GraphQL Subscriptions.
+
+Security
+JWT Authentication ensures all user sessions are protected.
+
+Role-Based Access Control restricts unauthorized users from manipulating data.
+
+bcrypt is used for secure password hashing.
+
+Tech Stack
+Frontend:
+React.js, Next.js, Material-UI
+
+### Backend:
+Node.js, Express.js
+
+### Database:
+MongoDB (Mongoose ODM)
+
+### Authentication:
+JWT, bcrypt
+
+### API Layer:
+GraphQL (Queries, Mutations, Subscriptions)
+
+### Email Service:
+Nodemailer (for password recovery)
+
+### State Management:
+React Context (AuthContext)
+
+System Flow
+User registers/login → Authenticated with JWT.
+
+##### Role-based redirection:
+User → User Profile (questions, answers, account details).
+
+Admin → Admin Dashboard (user management, question moderation).
+
+Ask/Answer → Stored in MongoDB, instantly updated on the homepage.
+
+Like/Dislike system → Helps highlight popular content.
+
+Search → Finds relevant questions across the platform.
+
+Subscriptions → Admin gets real-time notifications for user actions.
+
+### Key Highlights
+Community-driven Q&A forum with chat-like interaction.
+
+Fully authenticated & authorized workflows.
+
+Real-time admin notifications with GraphQL Subscriptions.
+
+Modern, responsive UI with Material-UI.
+
+Scalable architecture built on the MERN + GraphQL stack.
+
+### Future Enhancements
+User-to-user direct chat or messaging.
+
+Upvote/downvote analytics dashboard for admins.
+
+Tagging & categorization of questions.
+
+Push/email notifications for users on activity in their questions.
+
+Contribution
+Contributions are welcome! Please fork the repo and create a pull request.
