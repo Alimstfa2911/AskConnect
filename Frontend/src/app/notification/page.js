@@ -13,19 +13,25 @@ export default function NotificationBell() {
   const handleOpen = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
+  const filteredNotifications = notifications.filter(
+    (n) => n.actor !== user?.id
+  );
+
   return (
     <>
       <IconButton color="inherit" onClick={handleOpen}>
-        <Badge badgeContent={notifications.length} color="error">
+        <Badge badgeContent={filteredNotifications.length} color="error">
           <NotificationsIcon />
         </Badge>
       </IconButton>
 
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        {notifications.length === 0 ? (
+        {filteredNotifications.length === 0 ? (
           <MenuItem>No notifications</MenuItem>
-        ) : (  notifications.id !== user.id &&
-          notifications.map((n) => <MenuItem key={n.id}>{n.message}</MenuItem>)
+        ) : (
+          filteredNotifications.map((n) => (
+            <MenuItem key={n.id}>{n.message}</MenuItem>
+          ))
         )}
       </Menu>
     </>

@@ -84,6 +84,16 @@ export const userMutation = {
   deleteUser: async (_, { id }, context) => {
     authCheck(context);
     roleCheck(context);
+
+    if (context.user.id === id) {
+      throw new Error("You cannot delete your own account.");
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
     await User.findByIdAndDelete(id);
     return { message: "User deleted successfully" };
   },
@@ -234,6 +244,7 @@ export const answerMutation = {
     for (const admin of admins) {
       const notification = await Notification.create({
         user: admin._id,
+        actor: context.user.id,
         message: `${context.user.name} answered a question`,
       });
 

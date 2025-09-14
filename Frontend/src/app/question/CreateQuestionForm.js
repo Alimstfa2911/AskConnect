@@ -52,7 +52,6 @@ export default function CreateQuestionForm() {
         px: 2,
       }}
     >
-      {/* Left side text */}
       <Box sx={{ maxWidth: 400 }}>
         <Typography variant="h4" fontWeight="bold" gutterBottom>
           Create a New Question

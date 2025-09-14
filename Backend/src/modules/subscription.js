@@ -1,3 +1,4 @@
+import { withFilter } from "graphql-subscriptions";
 import { Notification } from "../models/notification.js";
 
 export const notificationResolvers = {
@@ -8,8 +9,13 @@ export const notificationResolvers = {
   },
   Subscription: {
     newNotification: {
-      subscribe: (_, { userId }, { pubsub }) =>
-        pubsub.asyncIterableIterator(["NEW_NOTIFICATION"]),
+      subscribe: withFilter(
+        (_, __, { pubsub }) =>
+          pubsub.asyncIterableIterator(["NEW_NOTIFICATION"]),
+        (payload, variables) => {
+          return payload.newNotification.user.toString() === variables.userId;
+        }
+      ),
     },
   },
 };
