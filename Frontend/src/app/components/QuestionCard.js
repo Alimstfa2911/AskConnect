@@ -24,15 +24,20 @@ export default function QuestionCard({ question, hideViewButton = false }) {
   const { user, isLoggedIn } = useContext(AuthContext);
 
   const upvoteCount = question.votes?.filter((v) => v.value === 1).length || 0;
-  const downvoteCount = question.votes?.filter((v) => v.value === -1).length || 0;
+  const downvoteCount =
+    question.votes?.filter((v) => v.value === -1).length || 0;
   const userVote = question.votes?.find((v) => v.user?.id === user?.id)?.value;
 
   const [upvote] = useMutation(UPVOTE_QUESTION, {
-    refetchQueries: [{ query: GET_QUESTION_BY_ID, variables: { id: question.id } }],
+    refetchQueries: [
+      { query: GET_QUESTION_BY_ID, variables: { id: question.id } },
+    ],
   });
 
   const [downvote] = useMutation(DOWNVOTE_QUESTION, {
-    refetchQueries: [{ query: GET_QUESTION_BY_ID, variables: { id: question.id } }],
+    refetchQueries: [
+      { query: GET_QUESTION_BY_ID, variables: { id: question.id } },
+    ],
   });
 
   const handleVote = async (type) => {
@@ -46,16 +51,28 @@ export default function QuestionCard({ question, hideViewButton = false }) {
   };
 
   return (
-    <Card sx={{  p: 5, backgroundColor: "#111827", color: "#E5E7EB" }}>
+    <Card sx={{ p: 5, backgroundColor: "#111827", color: "#E5E7EB" }}>
       <CardContent>
+        
         <Typography variant="h6" sx={{ color: "#E5E7EB" }}>
           {question.title}
         </Typography>
         <Typography variant="body2" sx={{ color: "#D1D5DB" }}>
           {question.description}
         </Typography>
-        <Typography variant="caption" display="block" sx={{ mt: 1, color: "#9CA3AF" }}>
+        <Typography
+          variant="caption"
+          display="block"
+          sx={{ mt: 1, color: "#9CA3AF" }}
+        >
           Asked by: {question.author?.name || "Anonymous"}
+        </Typography>
+        <Typography
+          variant="caption"
+          sx={{ color: "#9CA3AF", mb: 1, mt: 1 }}
+          display="block"
+        >
+          {Date(question.createdAt).toLocaleString()}
         </Typography>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 2 }}>

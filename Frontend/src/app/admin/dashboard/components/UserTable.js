@@ -90,13 +90,13 @@ export default function UserTable() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 200 },
+    { field: "id", headerName: "ID", width: 250 },
     { field: "name", headerName: "Name", width: 150 },
-    { field: "email", headerName: "Email", width: 200 },
+    { field: "email", headerName: "Email", width: 250 },
     {
       field: "role",
       headerName: "Role",
-      width: 180,
+      width: 200,
       renderCell: (params) => (
         <select
           value={params.row.role}
@@ -111,7 +111,7 @@ export default function UserTable() {
     {
       field: "actions",
       headerName: "Actions",
-      width: 150,
+      width: 190,
       renderCell: (params) => (
         <Button
           variant="contained"
@@ -122,8 +122,7 @@ export default function UserTable() {
           {deleteLoading ? "Deleting..." : "Delete"}
         </Button>
       ),
-    },
-    { field: "createdAt", headerName: "Created At", width: 180 },
+    }
   ];
 
   return (

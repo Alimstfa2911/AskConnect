@@ -17,7 +17,7 @@ export default function CreateQuestionForm() {
 
   const [createQuestion, { loading }] = useMutation(CREATE_QUESTION, {
     onCompleted: () => {
-      router.push("/"); 
+      router.push("/");
     },
     onError: (err) => {
       setErrorMsg(err.message);
@@ -25,7 +25,7 @@ export default function CreateQuestionForm() {
   });
 
   useEffect(() => {
-    setFadeIn(true); 
+    setFadeIn(true);
   }, []);
 
   const handleSubmit = (e) => {
@@ -46,10 +46,24 @@ export default function CreateQuestionForm() {
       sx={{
         display: "flex",
         justifyContent: "center",
+        alignItems: "flex-start",
+        gap: 4,
         mt: 5,
         px: 2,
       }}
     >
+      {/* Left side text */}
+      <Box sx={{ maxWidth: 400 }}>
+        <Typography variant="h4" fontWeight="bold" gutterBottom>
+          Create a New Question
+        </Typography>
+        <Typography variant="body1" sx={{ color: "#9CA3AF" }}>
+          Share your doubts, insights, or challenges with the community. 
+          Others will join in to answer, discuss, and learn with you.
+        </Typography>
+      </Box>
+
+      {/* Form card */}
       <Card
         sx={{
           width: "100%",
@@ -78,8 +92,12 @@ export default function CreateQuestionForm() {
               backgroundColor: "#1F2937",
               "& .MuiInputBase-input": { color: "#E5E7EB" },
               "& .MuiOutlinedInput-notchedOutline": { borderColor: "#374151" },
-              "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#3B82F6" },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#3B82F6" },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#3B82F6",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#3B82F6",
+              },
             }}
           />
           <TextField
@@ -94,33 +112,62 @@ export default function CreateQuestionForm() {
               backgroundColor: "#1F2937",
               "& .MuiInputBase-input": { color: "#E5E7EB" },
               "& .MuiOutlinedInput-notchedOutline": { borderColor: "#374151" },
-              "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#3B82F6" },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#3B82F6" },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#3B82F6",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#3B82F6",
+              },
             }}
           />
 
           {errorMsg && (
-            <Alert severity="error" sx={{ mt: 2, backgroundColor: "#B91C1C", color: "#FEE2E2" }}>
+            <Alert
+              severity="error"
+              sx={{ mt: 2, backgroundColor: "#B91C1C", color: "#FEE2E2" }}
+            >
               {errorMsg}
             </Alert>
           )}
 
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            disabled={loading}
-            sx={{
-              mt: 3,
-              py: 1.2,
-              backgroundColor: "#3B82F6",
-              color: "#E5E7EB",
-              "&:hover": { backgroundColor: "#2563EB", transform: "scale(1.02)" },
-              transition: "0.3s",
-            }}
-          >
-            {loading ? "Creating..." : "Share..."}
-          </Button>
+          {/* Buttons row */}
+          <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              disabled={loading}
+              sx={{
+                py: 1.2,
+                backgroundColor: "#3B82F6",
+                color: "#E5E7EB",
+                "&:hover": {
+                  backgroundColor: "#2563EB",
+                  transform: "scale(1.02)",
+                },
+                transition: "0.3s",
+              }}
+            >
+              {loading ? "Creating..." : "Share"}
+            </Button>
+
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => router.back()}
+              sx={{
+                py: 1.2,
+                borderColor: "#3B82F6",
+                color: "#3B82F6",
+                "&:hover": {
+                  borderColor: "#2563EB",
+                  backgroundColor: "rgba(59,130,246,0.1)",
+                },
+              }}
+            >
+              Back
+            </Button>
+          </Box>
         </Box>
       </Card>
     </Box>

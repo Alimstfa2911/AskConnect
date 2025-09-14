@@ -16,32 +16,57 @@ export const userMutation = {
   registerUser: async (_, args) => {
     const user = await User.findOne({ email: args.email });
 
-    if (user) throw new Error("User already exists ");
-
+    if (user) {
+      return {
+        success: false,
+        message: "User already exists",
+        token: null,
+        user: null,
+      };
+    }
     const hashedPassword = await bcrypt.hash(args.password, 10);
 
     const newUser = await User.create({
       ...args,
       password: hashedPassword,
     });
-    console.log("NewUser :", newUser);
-    if (!newUser) throw new Error("Failed to create user");
+
+    if (!newUser) {
+      return {
+        success: false,
+        message: "Failed to create user",
+        token: null,
+        user: null,
+      };
+    }
 
     const token = jwt.sign({ id: newUser._id }, "SECRET_KEY", {
       expiresIn: "7d",
     });
-    return { token, user: newUser };
+
+    return {
+      success: true,
+      message: "User registered successfully",
+      token,
+      user: newUser,
+    };
   },
 
   loginUser: async (_, { email, password }) => {
     const user = await User.findOne({ email });
 
-    if (!user) throw new Error("No user exists");
-
-    const valid = bcrypt.compare(password, user.password);
-
-    if (!valid) throw new Error("Incorrect password");
-
+    if (!user) {
+      return { success: false, message: "No user exists", user: null };
+    }
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      return {
+        success: false,
+        message: "Incorrect password",
+        token: null,
+        user: null,
+      };
+    }
     const token = jwt.sign(
       {
         id: user._id,
@@ -53,10 +78,7 @@ export const userMutation = {
       { expiresIn: "7d" }
     );
 
-    return {
-      token,
-      user,
-    };
+    return { success: true, message: "Login successful", token, user };
   },
 
   deleteUser: async (_, { id }, context) => {
@@ -96,7 +118,7 @@ export const questionMutation = {
       $push: { questions: question._id },
     });
 
-    const admins = await User.find({ role: "admin" }); 
+    const admins = await User.find({ role: "admin" });
 
     admins.forEach((admin) => {
       console.log("Admin id:", admin.id);
@@ -209,7 +231,7 @@ export const answerMutation = {
 
     const admins = await User.find({ role: "admin" });
 
-     for (const admin of admins) {
+    for (const admin of admins) {
       const notification = await Notification.create({
         user: admin._id,
         message: `${context.user.name} answered a question`,
@@ -217,8 +239,6 @@ export const answerMutation = {
 
       pubsub.publish("NEW_NOTIFICATION", { newNotification: notification });
     }
-
-    console.log("All notifications published for admins");
 
     return await answer.populate([
       "author",
@@ -293,6 +313,10 @@ export const answerVoteMutation = {
 export const mailMutation = {
   forgotPassword: async (_, { email }, context) => {
     const user = await User.findOne({ email });
+    console.log("User ", user);
+    if (!user) {
+      return { success: false, message: "No user exists with this email" };
+    }
 
     const token = jwt.sign(
       {
@@ -307,19 +331,41 @@ export const mailMutation = {
     const resetLink = `${process.env.FRONTEND_URL}/reset_password/${token}`;
 
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: `"AskConnect Support" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: "Password Reset",
-      html: `<p>Click <a href="${resetLink}">here</a> to reset your password. 
-               This link is valid for 15 minutes.</p>`,
+      subject: "AskConnect Password Reset Request",
+      html: `
+    <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #111827;">
+      <h2 style="color: #3B82F6;">Password Reset Request</h2>
+      <p>Hello,</p>
+      <p>We received a request to reset your AskConnect password. Click the button below to reset it:</p>
+      <p style="text-align: center; margin: 20px 0;">
+        <a href="${resetLink}" style="
+          background-color: #3B82F6;
+          color: #ffffff;
+          padding: 10px 20px;
+          text-decoration: none;
+          border-radius: 5px;
+          font-weight: bold;
+        ">Reset Password</a>
+      </p>
+      <p>This link will expire in 15 minutes.</p>
+      <p>If you did not request a password reset, please ignore this email.</p>
+      <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 20px 0;" />
+      <p style="font-size: 12px; color: #6B7280;">Sent by AskConnect community forum</p>
+    </div>
+  `,
     });
 
-    return { message: "Password reset email sent" };
+    return {
+      message: "A password reset link has been sent to your email. ",
+    };
   },
 
   resetPassword: async (_, { token, newPassword }, context) => {
     try {
       const decoded = jwt.verify(token, "SECRET_KEY");
+      console.log("Decode id", decoded);
       const user = await User.findById(decoded.id);
       if (!user) throw new Error("Invalid token");
 

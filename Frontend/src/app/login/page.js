@@ -2,25 +2,25 @@
 
 import { useState, useContext } from "react";
 import { useMutation } from "@apollo/client/react";
-import { LOGIN } from "../graphql/mutations";
 import {
   Box,
   Button,
   TextField,
   Typography,
   Alert,
+  Snackbar,
   Link as MuiLink,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "../context/AuthContext";
+import { LOGIN } from "../graphql/mutations";
 import Template from "../pages/Template";
-import Login_Image from '../public/images/Login_Image.jpg';
-
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
   const router = useRouter();
   const { login: contextLogin } = useContext(AuthContext);
 
@@ -28,13 +28,12 @@ export default function LoginPage() {
     onCompleted: (data) => {
       const token = data?.loginUser?.token;
       const user = data?.loginUser?.user;
-      console.log("Token :", token);
-      console.log("User :", user);
       if (token && user) {
         contextLogin(token, user);
-         router.push("/profile");
+        setSuccessMsg("Login successful! Redirecting...");
+        setTimeout(() => router.push("/profile"), 500);
       } else {
-        setErrorMsg("Login failed");
+        setErrorMsg("Incorrect email or password");
       }
     },
     onError: (error) => {
@@ -45,45 +44,57 @@ export default function LoginPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrorMsg("");
+
+    if (!email || !password) {
+      setErrorMsg("Email and password are required");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setErrorMsg("Invalid email format");
+      return;
+    }
+
     loginMutation({ variables: { email, password } });
   };
 
-  // Form JSX
   const form = (
-    <Box component="form" onSubmit={handleSubmit}>
-      <TextField
-        fullWidth
-        label="Email"
-        margin="normal"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <TextField
-        fullWidth
-        label="Password"
-        type="password"
-        margin="normal"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+    <>
+      <Box component="form" onSubmit={handleSubmit}>
+        <TextField
+          fullWidth
+          label="Email"
+          margin="normal"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          label="Password"
+          type="password"
+          margin="normal"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      {errorMsg && (
-        <Alert severity="error" sx={{ mt: 2 }}>
-          {errorMsg}
-        </Alert>
-      )}
+        {errorMsg && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {errorMsg}
+          </Alert>
+        )}
 
-      <Button
-        type="submit"
-        variant="contained"
-        fullWidth
-        disabled={loading}
-        sx={{ mt: 3 }}
-      >
-        {loading ? "Logging in..." : "Login"}
-      </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth
+          disabled={loading}
+          sx={{ mt: 3 }}
+        >
+          {loading ? "Logging in..." : "Login"}
+        </Button>
+      </Box>
 
-      {/* Links */}
       <Box sx={{ mt: 3, textAlign: "center" }}>
         <MuiLink
           component="button"
@@ -106,7 +117,21 @@ export default function LoginPage() {
           </MuiLink>
         </Typography>
       </Box>
-    </Box>
+      <Snackbar
+        open={!!successMsg}
+        autoHideDuration={2000}
+        onClose={() => setSuccessMsg("")}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSuccessMsg("")}
+          severity="success"
+          sx={{ width: "100%", backgroundColor: "#4caf50", color: "#fff" }}
+        >
+          {successMsg}
+        </Alert>
+      </Snackbar>
+    </>
   );
 
   return (
@@ -114,7 +139,6 @@ export default function LoginPage() {
       title="Welcome Back"
       description1="Get back to your community"
       description2="Ask and Share with others"
-      image={Login_Image}
       form={form}
     />
   );

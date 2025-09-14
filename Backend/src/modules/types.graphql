@@ -9,8 +9,8 @@ type User {
 }
 
 type AuthPayload {
-  token: String!
-  user: User!
+  token: String
+  user: User
 }
 
 type Question {
@@ -22,6 +22,11 @@ type Question {
   createdAt: String!
   updatedAt: String!
   answers: [Answer]
+}
+
+type QuestionPagination {
+  items: [Question!]!
+  totalCount: Int!
 }
 
 type Answer {

@@ -1,61 +1,18 @@
-"use client";
-
-import { Box, Button, Card, CircularProgress, Typography } from "@mui/material";
-import { createApolloClient } from "./lib/apolloClient";
-import { useQuery } from "@apollo/client/react";
-import { GET_ALL_QUESTIONS } from "./graphql/queries";
-import QuestionCard from "./components/QuestionCard";
+import { Box, Card, Typography } from "@mui/material";
 import SearchBar from "./components/SearchBar";
-import { useContext, useMemo } from "react";
-import { AuthContext } from "./context/AuthContext";
-import { useRouter } from "next/navigation";
-import QuestionsList from "./question/questionList/page";
+import RecentDiscussions from "./components/RecentDiscussions";
 
 export default function HomePage() {
-  const client = useMemo(() => createApolloClient(), []);
-  const { _, error, data } = useQuery(GET_ALL_QUESTIONS, { client });
-  const router = useRouter();
-  const { user } = useContext(AuthContext);
-
-  if (error) {
-    return (
-      <Box display="flex" justifyContent="center" mt={5}>
-        <Typography color="error">Error: {error.message}</Typography>
-      </Box>
-    );
-  }
-
-  // if (!data?.questions || data.questions.length === 0) {
-  //   return (
-  //     <Box display="flex" justifyContent="center" mt={5}>
-  //       <Typography color="white">No questions found.</Typography>
-  //     </Box>
-  //   );
-  // }
-
   return (
-    <Box
-      sx={{
-        width: "100%",
-        minHeight: "100vh",
-        color: "white",
-        px: 3,
-        py: 6,
-      }}
-    >
+    <Box sx={{ width: "100%", minHeight: "100vh", color: "white", px: 3, py: 6 }}>
       <Box textAlign="center">
         <Typography variant="h3" fontWeight="bold" sx={{ mb: 2 }}>
           Empower your knowledge with{" "}
           <span style={{ color: "#38bdf8" }}>AskConnect</span>
         </Typography>
-
         <Typography
           variant="body1"
-          sx={{
-            maxWidth: 700,
-            mx: "auto",
-            color: "#9ca3af",
-          }}
+          sx={{ maxWidth: 700, mx: "auto", color: "#9ca3af",mb: 4, mt:4 }}
         >
           Ask, answer, like, and dislike with community.
         </Typography>
@@ -80,7 +37,7 @@ export default function HomePage() {
           Recent Discussions
         </Typography>
 
-        <QuestionsList questions={data?.questions || []} />
+        <RecentDiscussions />
       </Card>
     </Box>
   );

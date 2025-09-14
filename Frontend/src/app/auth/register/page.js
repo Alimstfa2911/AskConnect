@@ -13,8 +13,8 @@ import {
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import { useRouter } from "next/navigation";
-import Template from "../pages/Template";
 import { REGISTER } from "../graphql/mutations";
+import Template from "../pages/Template";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -27,13 +27,11 @@ export default function RegisterPage() {
 
   const [registerMutation, { loading }] = useMutation(REGISTER, {
     onCompleted: (res) => {
-      if (!res.registerUser.token) {
-        setSuccessMsg("User already exists. Please try with other Email");
-      } else {
-        setSuccessMsg(
-           " Registered,  Redirecting to login..."
-        );
+      if (res.registerUser.success) {
+        setSuccessMsg(res.registerUser.message + " Redirecting to login...");
         setTimeout(() => router.push("/login"), 1000);
+      } else {
+        setSuccessMsg("User already exists. Please try with other Email");
       }
     },
     onError: (error) => {

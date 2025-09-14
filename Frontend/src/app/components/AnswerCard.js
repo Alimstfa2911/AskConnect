@@ -78,7 +78,14 @@ export default function AnswerCard({ answer }) {
           display="block"
           sx={{ mt: 1, color: "#9CA3AF" }}
         >
-          Answered by: {answer.author?.name || "Anonymous"}
+          Answered by : {answer.author?.name || "Anonymous"}
+        </Typography>
+        <Typography
+          variant="caption"
+          sx={{ color: "#9CA3AF", mb: 1, mt: 1 }}
+          display="block"
+        >
+          {Date(answer.createdAt).toLocaleString()}
         </Typography>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 2 }}>

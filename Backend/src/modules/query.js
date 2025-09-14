@@ -4,15 +4,14 @@ import { authCheck } from "../utils/authUtils.js";
 
 export const userQuery = {
   users: async (_, __, context) => {
-    
     authCheck(context);
     const users = await User.find();
     return users;
   },
 
   getAllUsers: async (_, __, context) => {
-    if(!context.user || context.user.role !== "admin"){
-      return new Error("Not authorized")
+    if (!context.user || context.user.role !== "admin") {
+      return new Error("Not authorized");
     }
     return await User.find();
   },
@@ -56,16 +55,31 @@ export const questionQuery = {
     return questions;
   },
 
-  question: async (_, { id }) => {
+  questionsPagination: async (_, { limit, offset }) => {
+    const totalCount = await Question.countDocuments();
 
+    const questions = await Question.find()
+      .populate("author")
+      .populate("votes.user")
+      .sort({ createdAt: -1 }) 
+      .skip(offset) 
+      .limit(limit); 
+
+    return {
+      items: questions,
+      totalCount,
+    };
+  },
+
+  question: async (_, { id }) => {
     const question = await Question.findById(id)
       .populate("author")
       .populate({
         path: "answers",
-        populate: { path: "author" }, 
+        populate: { path: "author" },
       })
       .populate({
-        path: "votes.user", 
+        path: "votes.user",
       });
 
     if (!question) return null;

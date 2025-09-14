@@ -15,7 +15,7 @@ export const PROFILE = gql`
         id
         text
         question {
-            title
+          title
         }
       }
       role
@@ -42,7 +42,35 @@ export const GET_ALL_QUESTIONS = gql`
         }
         value
       }
-       createdAt
+      createdAt
+    }
+  }
+`;
+
+export const GET_ALL_QUESTIONS_PAGINATION = gql`
+  query GetAllQuestionsPagination($limit: Int!, $offset: Int!) {
+    questionsPagination(limit: $limit, offset: $offset) {
+      items {
+        id
+        title
+        description
+        author {
+          id
+          name
+        }
+        answers {
+          id
+        }
+        votes {
+          user {
+            id
+            name
+          }
+          value
+        }
+        createdAt
+      }
+      totalCount
     }
   }
 `;

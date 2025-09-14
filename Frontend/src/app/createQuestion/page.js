@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useContext, useEffect } from "react";
-import { Box, TextField, Button, Typography, Card, Alert } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Card,
+  Alert,
+  Stack,
+} from "@mui/material";
 import { CREATE_QUESTION } from "../graphql/mutations";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "../context/AuthContext";
@@ -17,7 +25,7 @@ export default function CreateQuestionForm() {
 
   const [createQuestion, { loading }] = useMutation(CREATE_QUESTION, {
     onCompleted: () => {
-      router.push("/"); // redirect after creation
+      router.push("/");
     },
     onError: (err) => {
       setErrorMsg(err.message);
@@ -25,7 +33,7 @@ export default function CreateQuestionForm() {
   });
 
   useEffect(() => {
-    setFadeIn(true); // trigger fade-in animation on mount
+    setFadeIn(true);
   }, []);
 
   const handleSubmit = (e) => {
@@ -57,14 +65,26 @@ export default function CreateQuestionForm() {
           p: 4,
           boxShadow: 4,
           borderRadius: 3,
+          backgroundColor: "#111827",
+          color: "#E5E7EB",
           opacity: fadeIn ? 1 : 0,
           transform: fadeIn ? "translateY(0)" : "translateY(20px)",
           transition: "all 0.5s ease-in-out",
         }}
       >
-        <Typography variant="h5" fontWeight="bold" align="center" gutterBottom>
+        {/* Heading and info text */}
+        <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
           Share with the community
         </Typography>
+        <Typography variant="body1" sx={{ mb: 1 }}>
+          Post your question with a clear title and description so others can
+          help.
+        </Typography>
+        <Typography variant="body2" sx={{ fontStyle: "italic", mb: 3 }}>
+          Your contribution empowers knowledge sharing.
+        </Typography>
+
+        {/* Form */}
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
             fullWidth
@@ -72,6 +92,17 @@ export default function CreateQuestionForm() {
             margin="normal"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            sx={{
+              backgroundColor: "#1F2937",
+              "& .MuiInputBase-input": { color: "#E5E7EB" },
+              "& .MuiOutlinedInput-notchedOutline": { borderColor: "#374151" },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#3B82F6",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#3B82F6",
+              },
+            }}
           />
           <TextField
             fullWidth
@@ -81,28 +112,65 @@ export default function CreateQuestionForm() {
             margin="normal"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            sx={{
+              backgroundColor: "#1F2937",
+              "& .MuiInputBase-input": { color: "#E5E7EB" },
+              "& .MuiOutlinedInput-notchedOutline": { borderColor: "#374151" },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#3B82F6",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#3B82F6",
+              },
+            }}
           />
 
           {errorMsg && (
-            <Alert severity="error" sx={{ mt: 2 }}>
+            <Alert
+              severity="error"
+              sx={{ mt: 2, backgroundColor: "#B91C1C", color: "#FEE2E2" }}
+            >
               {errorMsg}
             </Alert>
           )}
 
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            disabled={loading}
-            sx={{
-              mt: 3,
-              py: 1.2,
-              transition: "0.3s",
-              "&:hover": { backgroundColor: "primary.dark", transform: "scale(1.02)" },
-            }}
-          >
-            {loading ? "Creating..." : "Share..."}
-          </Button>
+          {/* Buttons in one row */}
+          <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => router.back()}
+              sx={{
+                py: 1.2,
+                borderColor: "#3B82F6",
+                color: "#3B82F6",
+                "&:hover": {
+                  borderColor: "#2563EB",
+                  backgroundColor: "rgba(59,130,246,0.1)",
+                },
+              }}
+            >
+              Back
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              disabled={loading}
+              sx={{
+                py: 1.2,
+                backgroundColor: "#3B82F6",
+                color: "#E5E7EB",
+                "&:hover": {
+                  backgroundColor: "#2563EB",
+                  transform: "scale(1.02)",
+                },
+                transition: "0.3s",
+              }}
+            >
+              {loading ? "Creating..." : "Share"}
+            </Button>
+          </Stack>
         </Box>
       </Card>
     </Box>
