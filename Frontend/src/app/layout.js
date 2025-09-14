@@ -7,6 +7,7 @@ import Layout from "./components/Layout";
 import AuthProvider from "./context/AuthContext";
 import ApolloWrapper from "./provider/ApolloProvider";
 import { NotificationProvider } from "./context/NotificationContext";
+import { SearchProvider } from "./context/SearchContext";
 
 const theme = createTheme({
   palette: {
@@ -86,14 +87,16 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <AuthProvider>
-          <ApolloWrapper>
-            <NotificationProvider>
-              <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <Layout>{children}</Layout>
-              </ThemeProvider>
-            </NotificationProvider>
-          </ApolloWrapper>
+          <SearchProvider>
+            <ApolloWrapper>
+              <NotificationProvider>
+                <ThemeProvider theme={theme}>
+                  <CssBaseline />
+                  <Layout>{children}</Layout>
+                </ThemeProvider>
+              </NotificationProvider>
+            </ApolloWrapper>
+          </SearchProvider>
         </AuthProvider>
       </body>
     </html>

@@ -1,7 +1,9 @@
 "use client";
 import { createContext, useState, useEffect } from "react";
 import { createApolloClient } from "../lib/apolloClient";
+
 export const AuthContext = createContext();
+
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);

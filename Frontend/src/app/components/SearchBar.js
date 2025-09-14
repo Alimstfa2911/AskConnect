@@ -16,24 +16,28 @@ import QuestionCard from "./QuestionCard";
 import { useLazyQuery } from "@apollo/client/react";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "../context/AuthContext";
+import { useSearch } from "../context/SearchContext";
 
 export default function SearchBar() {
-  const [keyword, setKeyword] = useState("");
+  // const [keyword, setKeyword] = useState("");
   const router = useRouter();
   const { isLoggedIn } = useContext(AuthContext);
+  const { results, setResults, keyword, setKeyword } = useSearch();
 
   const [searchQuestions, { data, loading, error }] =
     useLazyQuery(SEARCH_QUESTIONS);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const visibleCount = 3; // cards visible at a time
-  const cardWidth = 300; // adjust based on your QuestionCard width
+  const visibleCount = 3;
+  const cardWidth = 300;
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (keyword.trim() !== "") {
-        searchQuestions({ variables: { keyword } });
-        setCurrentIndex(0); // reset carousel
+        searchQuestions({ variables: { keyword } }).then((res) => {
+          setResults(res.data.searchQuestions);
+          setCurrentIndex(0);
+        });
       }
     }, 300);
 
@@ -54,7 +58,6 @@ export default function SearchBar() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      {/* Search Input + Ask Button */}
       <Box display="flex" justifyContent="center" gap={2} sx={{ mb: 5 }}>
         <TextField
           placeholder="Search the community"
@@ -92,7 +95,6 @@ export default function SearchBar() {
       {loading && <Typography>Searching...</Typography>}
       {error && <Typography color="error">{error.message}</Typography>}
 
-      {/* Search Results Carousel */}
       {data?.searchQuestions?.length > 0 && (
         <Card
           sx={{
@@ -112,7 +114,6 @@ export default function SearchBar() {
           </Typography>
 
           <Box sx={{ position: "relative" }}>
-            {/* Left Arrow */}
             <IconButton
               onClick={handlePrev}
               disabled={currentIndex === 0}
@@ -130,7 +131,6 @@ export default function SearchBar() {
               <ArrowBackIos />
             </IconButton>
 
-            {/* Cards Container */}
             <Box
               sx={{
                 overflow: "hidden",
@@ -142,19 +142,29 @@ export default function SearchBar() {
                 sx={{
                   display: "flex",
                   transition: "transform 0.5s ease",
-                  transform: `translateX(-${currentIndex * (cardWidth + 16)}px)`,
+                  transform: `translateX(-${
+                    currentIndex * (cardWidth + 16)
+                  }px)`,
                   gap: 2,
+                  alignItems: "stretch",
                 }}
               >
                 {data.searchQuestions.map((q) => (
-                  <Box key={q.id} sx={{ minWidth: cardWidth }}>
-                    <QuestionCard question={q} />
+                  <Box
+                    key={q.id}
+                    sx={{
+                      minWidth: cardWidth,
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%",
+                    }}
+                  >
+                    <QuestionCard question={q} sx={{ flexGrow: 1 }} />
                   </Box>
                 ))}
               </Box>
             </Box>
 
-            {/* Right Arrow */}
             <IconButton
               onClick={handleNext}
               disabled={

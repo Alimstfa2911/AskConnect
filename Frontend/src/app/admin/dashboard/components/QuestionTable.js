@@ -80,7 +80,7 @@ export default function QuestionsTable() {
                 <TableCell>{q.title}</TableCell>
                 <TableCell>{q.author?.name || "Anonymous"}</TableCell>
                 <TableCell>{q.answers.length}</TableCell>
-                <TableCell>{new Date(q.createdAt).toLocaleString()}</TableCell>
+                <TableCell>{Date(q.createdAt).toLocaleString()}</TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"

@@ -103,6 +103,7 @@ export const userMutation = {
     roleCheck(context);
 
     const user = await User.findById(id);
+
     if (!user) {
       throw new Error("User not found");
     }
@@ -117,7 +118,7 @@ export const userMutation = {
 export const questionMutation = {
   createQuestion: async (_, { title, description }, context) => {
     authCheck(context);
-    console.log("User from context in createQUestion :", context);
+
     const question = await Question.create({
       title,
       description,
@@ -131,7 +132,6 @@ export const questionMutation = {
     const admins = await User.find({ role: "admin" });
 
     admins.forEach((admin) => {
-      console.log("Admin id:", admin.id);
       pubsub.publish(`NOTIFICATION_${admin.id}`, {
         notificationAdded: {
           id: new Date().getTime().toString(),
@@ -151,6 +151,7 @@ export const questionMutation = {
     }
 
     const question = await Question.findById(id);
+
     if (!question) {
       throw new Error("Question not found");
     }
@@ -170,6 +171,7 @@ export const questionVoteMutation = {
     authCheck(context);
 
     const question = await Question.findById(questionId);
+    
     if (!question) throw new Error("Question not found");
 
     const existingVote = question.votes.find(
