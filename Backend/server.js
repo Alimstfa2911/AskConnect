@@ -42,7 +42,6 @@ app.use(
         if (token) {
           try {
             user = jwt.verify(token, "SECRET_KEY");
-            console.log("Jwt verified User :", user);
           } catch (err) {
             console.error("JWT Error:", err.message);
           }

@@ -15,7 +15,6 @@ export default function AuthProvider({ children }) {
     const userData = localStorage.getItem("user");
 
     if (token && userData && userData !== "undefined") {
-      console.log("Token :", token);
       try {
         const parsedUser = JSON.parse(userData);
         setIsLoggedIn(true);

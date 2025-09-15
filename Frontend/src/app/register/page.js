@@ -15,6 +15,7 @@ import MuiAlert from "@mui/material/Alert";
 import { useRouter } from "next/navigation";
 import Template from "../pages/Template";
 import { REGISTER } from "../graphql/mutations";
+import { registerSchema } from "../validations/authValidation";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -30,9 +31,7 @@ export default function RegisterPage() {
       if (!res.registerUser.token) {
         setSuccessMsg("User already exists. Please try with other Email");
       } else {
-        setSuccessMsg(
-           " Registered,  Redirecting to login..."
-        );
+        setSuccessMsg(" Registered,  Redirecting to login...");
         setTimeout(() => router.push("/login"), 1000);
       }
     },
@@ -40,17 +39,6 @@ export default function RegisterPage() {
       setErrorMsg(error.message);
     },
   });
-
-  const validateForm = () => {
-    if (!name.trim() || name.length < 3)
-      return "Name must be at least 3 characters";
-    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
-      return "Invalid email format";
-    if (password.length < 6) return "Password must be at least 6 characters";
-    if (file && !file.type.startsWith("image/"))
-      return "Only image files allowed";
-    return null;
-  };
 
   const uploadImage = async (file) => {
     const formData = new FormData();
@@ -68,9 +56,13 @@ export default function RegisterPage() {
     e.preventDefault();
     setErrorMsg("");
 
-    const validationError = validateForm();
-    if (validationError) {
-      setErrorMsg(validationError);
+    const { error } = registerSchema.validate(
+      { name, email, password, avatar: file ? file.name : null },
+      { abortEarly: false }
+    );
+
+    if (error) {
+      setErrorMsg(error.details.map((d) => d.message).join(", "));
       return;
     }
 

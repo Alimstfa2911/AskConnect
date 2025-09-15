@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { AuthContext } from "../context/AuthContext";
 import { LOGIN } from "../graphql/mutations";
 import Template from "../pages/Template";
+import { loginSchema } from "../validations/authValidation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -45,18 +46,14 @@ export default function LoginPage() {
     e.preventDefault();
     setErrorMsg("");
 
-    if (!email || !password) {
-      setErrorMsg("Email and password are required");
+    const { error, value } = loginSchema.validate({ email, password });
+
+    if (error) {
+      setErrorMsg(error.details[0].message);
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setErrorMsg("Invalid email format");
-      return;
-    }
-
-    loginMutation({ variables: { email, password } });
+    loginMutation({ variables: value });
   };
 
   const form = (
