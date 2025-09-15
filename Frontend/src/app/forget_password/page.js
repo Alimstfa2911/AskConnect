@@ -17,7 +17,7 @@ export default function ForgotPassword() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [forgotPassword, { data, loading, error }] =
     useMutation(FORGOT_PASSWORD);
-
+  console.log("Data", data);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -33,7 +33,7 @@ export default function ForgotPassword() {
         justifyContent: "space-around",
         alignItems: "center",
         px: 2,
-        bgcolor: "#0f172a", 
+        bgcolor: "#0f172a",
       }}
     >
       <Box
@@ -59,7 +59,7 @@ export default function ForgotPassword() {
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
           <Alert severity="success" sx={{ width: "100%" }}>
-            Email sent to registered Email for password reset
+            {data?.forgotPassword?.message}
           </Alert>
         </Snackbar>
         <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>

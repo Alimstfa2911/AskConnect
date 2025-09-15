@@ -171,7 +171,7 @@ export const questionVoteMutation = {
     authCheck(context);
 
     const question = await Question.findById(questionId);
-    
+
     if (!question) throw new Error("Question not found");
 
     const existingVote = question.votes.find(
@@ -348,26 +348,26 @@ export const mailMutation = {
       to: email,
       subject: "AskConnect Password Reset Request",
       html: `
-    <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #111827;">
-      <h2 style="color: #3B82F6;">Password Reset Request</h2>
-      <p>Hello,</p>
-      <p>We received a request to reset your AskConnect password. Click the button below to reset it:</p>
-      <p style="text-align: center; margin: 20px 0;">
-        <a href="${resetLink}" style="
-          background-color: #3B82F6;
-          color: #ffffff;
-          padding: 10px 20px;
-          text-decoration: none;
-          border-radius: 5px;
-          font-weight: bold;
-        ">Reset Password</a>
-      </p>
-      <p>This link will expire in 15 minutes.</p>
-      <p>If you did not request a password reset, please ignore this email.</p>
-      <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 20px 0;" />
-      <p style="font-size: 12px; color: #6B7280;">Sent by AskConnect community forum</p>
-    </div>
-  `,
+        <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #111827;">
+          <h2 style="color: #3B82F6;">Password Reset Request</h2>
+          <p>Hello,</p>
+          <p>We received a request to reset your AskConnect password. Click the button below to reset it:</p>
+          <p style="text-align: center; margin: 20px 0;">
+            <a href="${resetLink}" style="
+              background-color: #3B82F6;
+              color: #ffffff;
+              padding: 10px 20px;
+              text-decoration: none;
+              border-radius: 5px;
+              font-weight: bold;
+            ">Reset Password</a>
+          </p>
+          <p>This link will expire in 15 minutes.</p>
+          <p>If you did not request a password reset, please ignore this email.</p>
+          <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 20px 0;" />
+          <p style="font-size: 12px; color: #6B7280;">Sent by AskConnect community forum</p>
+        </div>
+      `,
     });
 
     return {

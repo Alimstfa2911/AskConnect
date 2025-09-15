@@ -21,6 +21,10 @@ export function NotificationProvider({ children }) {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (!user) setNotifications([]);
+  }, [user]);
+
   return (
     <NotificationContext.Provider value={{ notifications, setNotifications }}>
       {children}

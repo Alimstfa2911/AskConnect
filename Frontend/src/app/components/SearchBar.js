@@ -45,7 +45,7 @@ export default function SearchBar() {
   }, [keyword]);
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0)); // slide 1 card
+    setCurrentIndex((prev) => Math.max(prev - 1, 0)); 
   };
 
   const handleNext = () => {

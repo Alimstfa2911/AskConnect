@@ -21,9 +21,14 @@ export default function Footer() {
   return (
     <Box
       component="footer"
-      sx={{ backgroundColor: "#111827", color: "#E5E7EB", pt: 8,mt: 6,
-         // shadow at top to separate from content
-        borderTop: "2px solid #374151"  }}
+      sx={{
+        backgroundColor: "#111827",
+        color: "#E5E7EB",
+        pt: 8,
+        mt: 6,
+
+        borderTop: "2px solid #374151",
+      }}
     >
       <Container maxWidth="lg">
         <Grid container spacing={6} justifyContent="space-between">
