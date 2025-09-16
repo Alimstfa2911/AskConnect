@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { Box, Typography, Card, Avatar } from "@mui/material";
+import { Box, Typography, Card, Avatar, Button } from "@mui/material";
 import { PROFILE } from "../graphql/queries";
 import { useQuery } from "@apollo/client/react";
 import { AuthContext } from "../context/AuthContext";
@@ -9,7 +9,9 @@ import UserTable from "../admin/dashboard/components/UserTable";
 import QuestionsTable from "../admin/dashboard/components/QuestionTable";
 
 export default function ProfilePage() {
-  const { user, loadingUser } = useContext(AuthContext);
+  const { user, location, address,  loadingUser } = useContext(AuthContext);
+  console.log("Address", address);
+
   const [profile, setProfile] = useState({});
 
   const { loading, error, data } = useQuery(PROFILE);
@@ -34,12 +36,13 @@ export default function ProfilePage() {
       </Box>
     );
 
-  const upperSectionHeight = 400; // fixed height for profile + Q/A
+  const upperSectionHeight = 400; 
+
+ 
 
   return (
     <Box sx={{ width: "100%", px: { xs: 2, md: 4 }, mt: 5 }}>
-      {/* Upper Section: User Profile + Questions/Answers */}
-      <Box
+     <Box
         sx={{
           display: "flex",
           gap: 4,
@@ -47,8 +50,8 @@ export default function ProfilePage() {
           mb: 4,
         }}
       >
-        {/* Left: Profile */}
-        <Card
+      
+      <Card
           sx={{
             flex: "0 0 300px",
             p: 3,
@@ -77,6 +80,9 @@ export default function ProfilePage() {
           <Typography variant="body2">
             <strong>Role:</strong> {profile?.role || "user"}
           </Typography>
+          { address && <Typography variant="body2">
+            <strong>Address :</strong> {address}
+          </Typography>}
         </Card>
 
         {/* Right: Questions & Answers */}

@@ -13,6 +13,7 @@ type AuthPayload {
   user: User
 }
 
+
 type Question {
   id: ID!
   title: String!

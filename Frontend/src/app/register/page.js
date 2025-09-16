@@ -40,24 +40,25 @@ export default function RegisterPage() {
     },
   });
 
-  const uploadImage = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "Community_forum");
-    const res = await fetch(process.env.NEXT_PUBLIC_CLOUDINARY_URL, {
-      method: "POST",
-      body: formData,
-    });
-    const data = await res.json();
-    return data.secure_url;
-  };
+  // const uploadImage = async (file) => {
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append("upload_preset", "Community_forum");
+  //   const res = await fetch(process.env.NEXT_PUBLIC_CLOUDINARY_URL, {
+  //     method: "POST",
+  //     body: formData,
+  //   });
+  //   const data = await res.json();
+  //   return data.secure_url;
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
+    setSuccessMsg("");
 
     const { error } = registerSchema.validate(
-      { name, email, password, avatar: file ? file.name : null },
+      { name, email, password },
       { abortEarly: false }
     );
 
@@ -66,19 +67,29 @@ export default function RegisterPage() {
       return;
     }
 
-    let avatarUrl = null;
+    let avatarUrl;
     if (file) {
       try {
-        avatarUrl = await uploadImage(file);
-      } catch {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "Community_forum");
+
+        const res = await fetch(process.env.NEXT_PUBLIC_CLOUDINARY_URL, {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        avatarUrl = data.secure_url;
+      } catch (err) {
         setErrorMsg("Image upload failed");
         return;
       }
     }
 
-    registerMutation({
-      variables: { name, email, password, avatar: avatarUrl },
-    });
+    const variables = { name, email, password };
+    if (avatarUrl) variables.avatar = avatarUrl;
+
+    registerMutation({ variables });
   };
 
   return (

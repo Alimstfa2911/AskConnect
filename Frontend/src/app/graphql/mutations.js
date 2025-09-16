@@ -53,6 +53,8 @@ export const LOGIN = gql`
   }
 `;
 
+
+
 export const UPVOTE_QUESTION = gql`
   mutation upvoteQuestion($questionId: ID!) {
     upvoteQuestion(questionId: $questionId) {
@@ -193,7 +195,6 @@ export const DELETE_USER = gql`
     }
   }
 `;
-
 
 export const MARK_NOTIFICATION_READ = gql`
   mutation MarkNotificationRead($id: ID!) {

@@ -53,6 +53,7 @@ type Mutation {
 
   createNotification(userId: ID!, message: String!): Notification!
 
+
 }
 
 type Subscription {
