@@ -38,8 +38,6 @@ export default function ProfilePage() {
 
   const upperSectionHeight = 400; 
 
- 
-
   return (
     <Box sx={{ width: "100%", px: { xs: 2, md: 4 }, mt: 5 }}>
      <Box
