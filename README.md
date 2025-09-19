@@ -44,9 +44,10 @@ Search questions with results shown on the homepage.
 Forgot password recovery via Nodemailer.
 
 <img width="1920" height="1080" alt="Screenshot from 2025-09-19 11-54-04" src="https://github.com/user-attachments/assets/781c4554-f685-4d05-b7c5-179e4c077426" />
-<img width="1920" height="1080" alt="Screenshot from 2025-09-19 11-54-33" src="https://github.com/user-attachments/assets/a68ff<img width="1920" height="1080" alt="Screenshot from 2025-09-19 11-54-43" src="https://github.com/user-attachments/assets/d3ea5be0-1ab5-41b8-afc0-46289b794bf0" />
-47a-115a-4dc6<img width="1920" height="1080" alt="Screenshot from 2025-09-19 11-54-54" src="https://github.com/user-attachments/assets/634efc70-31ca-4012-a82c-4d6613833c78" />
--bbb2-a6c9f635d9de" />
+<img width="1920" height="1080" alt="Screenshot from 2025-09-19 11-54-33" src="https://github.com/user-attachments/assets/a68ff47a-115a-4dc6-bbb2-a6c9f635d9de" />
+<img width="1920" height="1080" alt="Screenshot from 2025-09-19 11-54-43" src="https://github.com/user-attachments/assets/d3ea5be0-1ab5-41b8-afc0-46289b794bf0" />
+<img width="1920" height="1080" alt="Screenshot from 2025-09-19 11-54-54" src="https://github.com/user-attachments/assets/634efc70-31ca-4012-a82c-4d6613833c78" />
+
 
 
 
