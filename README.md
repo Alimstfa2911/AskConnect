@@ -1,6 +1,5 @@
 ## AskConnect
 AskConnect is a community-based FAQ forum where users can share questions, engage in discussions, and provide answers with an interactive voting system. It is built with React, Next.js, Material-UI, GraphQL, Node.js, MongoDB, JWT, and bcrypt, etc.. offering secure authentication, role-based authorization, real-time notifications, and an admin dashboard for complete oversight.
-<img width="1920" height="1080" alt="Screenshot from 2025-09-19 11-54-04" src="https://github.com/user-attachments/assets/58ab1200-14ae-4e2c-bc2f-97b6a4500060" />
 
 <img width="1920" height="1080" alt="Screenshot from 2025-09-19 11-52-46" src="https://github.com/user-attachments/assets/08dc634b-be89-4335-8e0e-1fe5e1c01302" />
 
